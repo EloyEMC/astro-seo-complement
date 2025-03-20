@@ -1,0 +1,86 @@
+BreadcrumbList
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://eloy-blog.pages.dev/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://eloy-blog.pages.dev/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Perros Callejeros",
+      "item": "https://eloy-blog.pages.dev/blog/hello-world-copy/"
+    }
+  ]
+}
+
+FAQPage
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué temas aborda este blog?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Este blog trata sobre tecnología, programación, buenas prácticas y más."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Con qué frecuencia se publican nuevos artículos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Se publican nuevos artículos semanalmente."
+      }
+    }
+  ]
+}
+
+Person 
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Eloy Martínez Cuesta",
+  "url": "https://eloy-blog.pages.dev/sobre-mi",
+  "sameAs": [
+    "https://www.linkedin.com/in/eloymartinezemc/",
+    "https://twitter.com/eloy_emc"
+  ]
+}
+
+WebSite
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Blog de Eloy Martínez Cuesta",
+  "url": "https://eloy-blog.pages.dev/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://eloy-blog.pages.dev/buscar?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+
+ImageObject 
+
+{
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "url": "https://eloy-blog.pages.dev/imagenes/imagen-destacada.jpg",
+  "width": 800,
+  "height": 600
+}
+
+
