@@ -1,0 +1,13 @@
+---
+import SEO from "../components/SEO.astro";
+import { siteConfig } from "../config";
+
+const { post, siteUrl, defaultImage } = Astro.props;
+---
+
+<SEO
+  entry={post}
+  siteUrl={siteUrl}
+  defaultImage={defaultImage}
+/>
+<!-- Resto del layout -->
