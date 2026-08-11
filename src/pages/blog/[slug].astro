@@ -1,23 +1,20 @@
 ---
-import BlogPost from "../../layouts/BlogPost.astro";
-import { getCollection } from 'astro:content';
-import { siteConfig } from "../../config";
-
-const siteUrl = siteConfig.site;
-const defaultImage = `${siteUrl}/default-image.png`;
+import { getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { siteConfig } from '../../config';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post, siteUrl, defaultImage },
+    params: { slug: post.id },
+    props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
+const defaultImage = siteConfig.site + '/og-default.png';
 ---
-
-<BlogPost post={post} siteUrl={siteUrl} defaultImage={defaultImage}>
+<BlogPost post={post} siteUrl={siteConfig.site} defaultImage={defaultImage}>
   <Content />
 </BlogPost>

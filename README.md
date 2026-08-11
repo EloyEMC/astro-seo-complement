@@ -1,260 +1,118 @@
-# SEO Component for Astro
+# astro-seo-complement
 
-This repository contains a reusable **SEO component** for Astro projects. It is designed to handle all essential SEO tags, Open Graph, Twitter Cards, and Schema.org (JSON-LD) markup for blog posts. The component is highly customizable and integrates seamlessly with Astro's content collections.
+Typed, reusable SEO metadata and JSON-LD tools for Astro. This is an independent community package, not an official Astro package.
 
+## Quick path
+
+```sh
+pnpm add astro-seo-complement
+```
+
+`astroSeo()` only validates integration defaults. It does not replace Astro's `site` setting, modify posts or pages, or inject SEO automatically.
+
+## Explicit SEO component
+
+Use `entry` for the existing blog flow. The component generates a `BlogPosting` only when the blog entry has an author. For pages and products, pass explicit metadata; `title` is required when `entry` is absent. Pass the correct schema explicitly because the content—not the URL—determines its Schema.org type.
+
+### Blog entry and BlogPosting
+
+```astro
 ---
-
-## Features
-
-- **Dynamic SEO Tags**:
-  - Automatically generates meta tags for title, description, keywords, and more.
-  - Supports Open Graph (Facebook) and Twitter Cards for social media sharing.
-
-- **Schema.org (JSON-LD)**:
-  - Generates structured data for blog posts, improving search engine visibility.
-
-- **Canonical URLs**:
-  - Ensures proper canonical URLs to avoid duplicate content issues.
-
-- **Robots Meta Tags**:
-  - Supports `noindex` and `nofollow` directives for controlling search engine indexing.
-
-- **Dynamic Image URLs**:
-  - Automatically constructs full image URLs using the site's base URL.
-
-- **Customizable**:
-  - Easily extendable to support additional SEO features or custom requirements.
-
+import SEO from 'astro-seo-complement/SEO.astro';
+const { post } = Astro.props;
 ---
-
-## Installation
-
-1. Clone this repository or copy the `SEO.astro` component into your Astro project.
-
-2. Import and use the SEO component in your Astro pages or layouts.
-   
-3. Folder structure:
-   ```plaintext
-  
-    ├── src/
-    │   ├── components/
-    │   │   └── SEO.astro                # Main component of SEO
-    │   ├── content/
-    │   │   └── blog/
-    │   │       └── *.md                 # Markdown files for blog posts
-    │   ├── layouts/
-    │   │   ├── BlogPost.astro           # Layout for blog pages
-    │   │   └── PostBaseLayout.astro     # Basic layout for blog pages
-    │   ├── pages/
-    │   │   ├── blog/
-    │   │   │   ├── [...page].astro      # Page to list blog posts
-    │   │   │   └── [slug].astro         # Dynamic page for each blog post
-    │   │   └── index.astro              # Home page
-    │   ├── config.ts                    # Site settings (siteUrl, title, etc.)
-    │   └── utils/
-    │       └── posts.ts                 # Utilidades para manejar entradas del blog
-    ├── public/
-    │   ├── images/                      # Utilities for managing blog entries
-    │   │   ├── logo.png
-    │   │   ├── favicon.png
-    │   │   └── default-image.png
-    │   └── sitemap-index.xml            # Sitemap of the site
-    ├── astro.config.mjs                 # Configuración de Astro
-    ├── package.json                     # Astro Settings
-    ├── README.md                        # Project documentation
-    └── LICENSE                          # Project License (MIT)
----
-
-##Usage
-
-1. Add the SEO Component to Your Layout
-In your layout file (e.g., src/layouts/BlogPost.astro), import and use the SEO component:
-``` astro
----
-import SEO from "../components/SEO.astro";
-import { siteConfig } from "../config";
-
-const { post, siteUrl, defaultImage } = Astro.props;
----
-
 <SEO
   entry={post}
-  siteUrl={siteUrl}
-  defaultImage={defaultImage}
+  siteUrl="https://example.com"
+  siteName="Example"
+  defaultImage="/og-default.png"
 />
 ```
-2. Pass SEO Data from Your Pages
-In your page file (e.g., src/pages/blog/[slug].astro), pass the necessary data to the layout:
-``` astro
+
+### Generic page with WebPage and Organization
+
+```astro
 ---
-import BlogPost from "../../layouts/BlogPost.astro";
-import { getCollection } from 'astro:content';
-import { siteConfig } from "../../config";
+import SEO from 'astro-seo-complement/SEO.astro';
+import { buildOrganization, buildWebPage, composeGraph } from 'astro-seo-complement';
 
-const siteUrl = siteConfig.site; // Base URL of your site
-const defaultImage = `${siteUrl}/default-image.png`; // Default image for SEO
-
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post, siteUrl, defaultImage },
-  }));
-}
-
-const { post } = Astro.props;
-const { Content } = await post.render();
+const siteUrl = 'https://example.com';
+const schema = composeGraph(
+  buildWebPage({ url: '/about', siteUrl, name: 'About us', description: 'Our team' }),
+  buildOrganization({ name: 'Example Inc.', url: siteUrl, siteUrl }),
+);
 ---
-
-<BlogPost post={post} siteUrl={siteUrl} defaultImage={defaultImage}>
-  <Content />
-</BlogPost>
+<SEO title="About us" description="Our team" canonicalUrl="/about" siteUrl={siteUrl} schema={schema} />
 ```
-3. Define SEO Data in Your Markdown Files
-In your Markdown files (e.g., src/content/blog/*.md), define the SEO data in the frontmatter:
-```markdown
+
+### Product with an Offer and no fictional ratings
+
+```astro
 ---
-title: "Hello World"
-description: "Welcome to my blog! This is my first post."
-date: 2024-03-21
-image: "/images/hello-world.webp"
-image_alt: "Hello World Image"
-tags: ["welcome", "first-post"]
-twitter_img: "/images/twitter-hello-world.webp"
-twitterCreator: "@your_twitter_handle"
-twitterSite: "@your_twitter_handle"
-canonicalUrl: "{Astro.url.href}"
-author: "Your Name"
-authorUrl: "https://yourwebsite.com"
-authorImage: "/images/author.webp"
-ogType: "article"
-siteName: "Your Site Name"
-noindex: false
-nofollow: false
-keywords:
-  - blog
-  - seo
-  - astro
+import SEO from 'astro-seo-complement/SEO.astro';
+import { buildProduct } from 'astro-seo-complement';
+
+const siteUrl = 'https://example.com';
+const schema = buildProduct({
+  name: 'Widget', url: '/products/widget', siteUrl,
+  description: 'A real widget',
+  offers: { price: 29.99, priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
+});
 ---
+<SEO title="Widget" description="A real widget" image="/widget.png" siteUrl={siteUrl} schema={schema} />
 ```
----
-## Configuration
-1. Site Configuration
-Define your site's base URL and other settings in a configuration file (e.g., src/config.ts):
-```typscript
-export interface SiteConfig {
-  site: string;
-  title: string;
-  description: string;
-  // Add other fields as needed
-}
 
-export const siteConfig: SiteConfig = {
-  site: "https://yourwebsite.com", // Your site's base URL
-  title: "Your Site Name",
-  description: "Welcome to my blog!",
-};
+Supported explicit metadata includes `title`, `description`, `image`, `imageAlt`, `canonicalUrl`, `locale`, `author`, `authorUrl`, `date`, `modifiedDate`, `tags`, and `keywords`, plus the existing social and robots fields.
+
+## Automatic vs explicit
+
+| Automatic | Explicit/manual |
+|---|---|
+| URL and date normalization | `Article`, `NewsArticle`, `Product`, `FAQ`, and `HowTo` schemas |
+| HTML meta tags | Breadcrumbs and `Organization` |
+| Canonical URL | Sitemap, `robots.txt`, RSS, and hreflang |
+| Robots directives when requested | Any schema not passed to `SEO` |
+| Safe JSON-LD serialization when `schema` is passed | All Schema.org types and Google ranking guarantees are **not included** |
+| `BlogPosting` only for `entry` with an author | |
+
+The component safely serializes supplied JSON-LD, but Google validation and eligibility are the consumer's responsibility. Structured data does not guarantee ranking, crawling, indexing, or rich-result display.
+
+## Builders and escape hatch
+
+Exports include `buildPerson`, `buildOrganization`, `buildWebSite`, `buildProfilePage`, `buildWebPage`, `buildBreadcrumbList`, `buildArticle`, `buildBlogPosting`, `buildNewsArticle`, `buildOffer`, `buildAggregateOffer`, `buildAggregateRating`, `buildReview`, `buildProduct`, `buildFAQPage`, `buildHowTo`, and `composeGraph`. Use `SchemaNode` and `composeGraph` as the escape hatch for additional Schema.org types. Builders do not invent ratings, reviews, prices, or URLs.
+
+## Astro integration and sitemap
+
+Keep the canonical site in `astro.config.mjs` and add the optional integration separately:
+
+```js
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+import { astroSeo } from 'astro-seo-complement/astro';
+
+export default defineConfig({
+  site: 'https://example.com',
+  integrations: [
+    astroSeo({ siteUrl: 'https://example.com' }),
+    sitemap(),
+  ],
+});
 ```
-2. SEO Component Props
-The SEO component accepts the following props:
 
-| Prop            | Tipo                         | Descripción                                                                 |
-|-----------------|------------------------------|-----------------------------------------------------------------------------|
-| `entry`         | `CollectionEntry<'blog'>`    | La entrada del blog desde las colecciones de contenido de Astro.            |
-| `siteUrl`       | `string`                     | La URL base de tu sitio.                                                    |
-| `defaultImage`  | `string`                     | La URL de la imagen predeterminada para SEO (usada si no se proporciona una imagen en la publicación). |
-| `defaultLocale` | `string` (opcional)          | La configuración regional predeterminada para las etiquetas Open Graph (por defecto: "es_ES"). |
+Install `@astrojs/sitemap` and add it once when the site needs a sitemap. `astroSeo()` validates defaults only; it does not replace `site` or modify posts/pages. `robots.txt`, RSS, and hreflang remain application concerns.
 
----
-## Example Output
-The SEO component generates the following HTML:
-```html
+## Development
 
-   <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Hello World</title>
-    <meta name="description" content="Welcome to my blog! This is my first post.">
-    <meta name="keywords" content="blog, seo, astro">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="Hello World">
-    <meta property="og:description" content="Welcome to my blog! This is my first post.">
-    <meta property="og:image" content="https://yourwebsite.com/images/hello-world.webp">
-    <meta property="og:site_name" content="Your Site Name">
-    <meta property="og:locale" content="es_ES">
-    <meta property="og:url" content="https://yourwebsite.com/blog/hello-world">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@your_twitter_handle">
-    <meta name="twitter:creator" content="@your_twitter_handle">
-    <meta name="twitter:title" content="Hello World">
-    <meta name="twitter:description" content="Welcome to my blog! This is my first post.">
-    <meta name="twitter:image" content="https://yourwebsite.com/images/twitter-hello-world.webp">
-    <link rel="canonical" href="https://yourwebsite.com/blog/hello-world">
-    <meta name="author" content="Your Name">
-    <link rel="author" href="https://yourwebsite.com">
-    <meta name="author-image" content="https://yourwebsite.com/images/author.webp">
-    <meta property="article:published_time" content="2024-03-21T00:00:00.000Z">
-    <meta property="article:tag" content="welcome">
-    <meta property="article:tag" content="first-post">
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": "Hello World",
-        "description": "Welcome to my blog! This is my first post.",
-        "url": "https://yourwebsite.com/blog/hello-world",
-        "datePublished": "2024-03-21T00:00:00.000Z",
-        "dateModified": "2024-03-21T00:00:00.000Z",
-        "author": {
-          "@type": "Person",
-          "name": "Your Name",
-          "url": "https://yourwebsite.com",
-          "image": "https://yourwebsite.com/images/author.webp"
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "Your Site Name",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://yourwebsite.com/logo.png"
-          }
-        },
-        "image": "https://yourwebsite.com/images/hello-world.webp",
-        "keywords": "blog, seo, astro",
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://yourwebsite.com/blog/hello-world"
-        }
-      }
-    </script>
-    <link rel="icon" type="image/png" href="https://yourwebsite.com/favicon.png">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <!-- Your content here -->
-  </body>
-</html>
+```sh
+pnpm test
+pnpm check
+pnpm build
+pnpm exec astro build
+npm pack --dry-run --json
 ```
----
-## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+Validate generated structured data with Google's Rich Results Test and Schema Markup Validator. Consult current Google documentation because eligibility rules change.
 
----
-License
+## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-## Repository Description
-
-### SEO Component for Astro
-
-A reusable and customizable SEO component for Astro projects. It generates meta tags, Open Graph, Twitter Cards, and Schema.org (JSON-LD) markup for blog posts. Designed to improve search engine visibility and social media sharing.
-
-
----
-
-Feel free to customize the repository and README as needed! 😊
-
+MIT. See [LICENSE](./LICENSE).

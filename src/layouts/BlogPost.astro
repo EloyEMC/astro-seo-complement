@@ -1,13 +1,23 @@
 ---
-import SEO from "../components/SEO.astro";
-import { siteConfig } from "../config";
+import SEO from '../components/SEO.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  siteUrl: string;
+  defaultImage?: string;
+}
 
 const { post, siteUrl, defaultImage } = Astro.props;
 ---
-
-<SEO
-  entry={post}
-  siteUrl={siteUrl}
-  defaultImage={defaultImage}
-/>
-<!-- Resto del layout -->
+<!doctype html>
+<html lang={post.data.locale?.split('_')[0] ?? 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <SEO entry={post} siteUrl={siteUrl} defaultImage={defaultImage} siteName={post.data.siteName} />
+  </head>
+  <body>
+    <main><slot /></main>
+  </body>
+</html>

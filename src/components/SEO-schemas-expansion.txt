@@ -39,7 +39,7 @@ FAQPage
     },
     {
       "@type": "Question",
-      "name": "¿How often new articles are published?",
+      "name": "How often are new articles published?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "New articles are published weekly."

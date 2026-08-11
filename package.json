@@ -1,0 +1,42 @@
+{
+  "name": "astro-seo-complement",
+  "version": "0.1.0",
+  "description": "Reusable SEO metadata and Astro integration for content-driven sites.",
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "license": "MIT",
+  "engines": { "node": ">=18.17.0" },
+  "files": [
+    "README.md",
+    "README.es.md",
+    "LICENSE",
+    "src/components/SEO.astro",
+    "src/index.ts",
+    "src/integration.ts",
+    "src/seo.ts",
+    "src/schemas.ts"
+  ],
+  "exports": {
+    ".": { "types": "./src/index.ts", "default": "./src/index.ts" },
+    "./astro": { "types": "./src/integration.ts", "default": "./src/integration.ts" },
+    "./integration": { "types": "./src/integration.ts", "default": "./src/integration.ts" },
+    "./SEO.astro": "./src/components/SEO.astro"
+  },
+  "scripts": {
+    "check": "astro check",
+    "test": "vitest run",
+    "build": "tsc --noEmit && astro build"
+  },
+  "keywords": ["astro", "astro-component", "astro-integration", "seo", "optimization", "open-graph", "json-ld", "content-collections"],
+  "repository": { "type": "git", "url": "https://github.com/EloyEMC/astro-seo-complement" },
+  "bugs": { "url": "https://github.com/EloyEMC/astro-seo-complement/issues" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "pnpm": { "overrides": { "sharp": "^0.35.3" } },
+  "peerDependencies": { "astro": ">=5.0.0 <8.0.0" },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "astro": "^7.2.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}

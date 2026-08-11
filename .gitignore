@@ -1,0 +1,12 @@
+# Local Pi runtime state
+.atl/
+.codegraph/
+
+# Node.js and Astro
+node_modules/
+dist/
+.astro/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example

@@ -8,7 +8,7 @@ tags: ["welcome", "first-post"]
 twitter_img: "/images/twitter-hello-world.webp"
 twitterCreator: "@your_twitter_handle"
 twitterSite: "@your_twitter_handle"
-canonicalUrl: "{Astro.url.href}"
+canonicalUrl: "/blog/hello-world"
 author: "Your Name"
 authorUrl: "https://yourwebsite.com"
 authorImage: "/images/author.webp"
@@ -22,4 +22,4 @@ keywords:
   - astro
 ---
 
-# Article 
+# Article

@@ -1,143 +1,111 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { absoluteUrl, resolveSeoMetadata, robotsValue, serializeJsonLd, type SeoMetadata } from '../seo';
+import { buildBlogPosting, composeGraph, type SchemaInput, type SchemaGraph } from '../schemas';
 
-interface Props {
-  entry: CollectionEntry<'blog'>;
+interface SharedProps {
   siteUrl: string;
-  defaultImage: string;
+  defaultImage?: string;
   defaultLocale?: string;
+  siteName?: string;
+  favicon?: string;
+  schema?: SchemaInput | SchemaGraph;
 }
 
-const { entry, siteUrl, defaultImage, defaultLocale = "es_ES" } = Astro.props;
-const { data, slug } = entry;
+type BlogProps = SharedProps & { entry: CollectionEntry<'blog'> };
+type ExplicitProps = SharedProps & SeoMetadata & { entry?: never };
+type Props = BlogProps | ExplicitProps;
 
+const props = Astro.props as Props;
+const {
+  siteUrl,
+  defaultImage,
+  defaultLocale = 'en_US',
+  siteName,
+  favicon,
+  schema: providedSchema,
+} = props;
+
+const metadata: SeoMetadata = 'entry' in props && props.entry
+  ? {
+      ...props.entry.data,
+      image: props.entry.data.image,
+      imageAlt: props.entry.data.image_alt,
+      twitterImage: props.entry.data.twitter_img,
+    }
+  : props;
+
+const resolved = resolveSeoMetadata(
+  metadata,
+  siteUrl,
+  Astro.url.pathname,
+  defaultImage,
+);
 const {
   title,
   description,
-  date,
-  modifiedDate,
+  imageAlt,
   tags,
-  draft,
-  image,
-  image_alt,
   keywords,
-  twitter_img,
   twitterCreator,
   twitterSite,
-  canonicalUrl,
   author,
   authorUrl,
-  authorImage,
-  ogType = "article",
-  siteName,
+  locale,
+  ogType = 'article',
   noindex,
   nofollow,
-} = data;
-
-// Generate the canonical URL
-const fullCanonicalUrl = canonicalUrl ||  Astro.url.href;
-
-// Generate the full image (using the site's base URL)
-const fullImageUrl = image ? `${siteUrl}${image}` : defaultImage;
-const fullTwitterImageUrl = twitter_img ? `${siteUrl}${twitter_img}` : fullImageUrl;
-
-// Meta robots
-const metaRobots: string[] = [];
-if (noindex) metaRobots.push('noindex');
-if (nofollow) metaRobots.push('nofollow');
-const robotsContent = metaRobots.join(', ');
-
-// Schema.org (JSON-LD)
-const schemaOrgJSON = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": title,
-  "description": description,
-  "url": fullCanonicalUrl,
-  "datePublished": date.toISOString(),
-  "dateModified": modifiedDate || date.toISOString(),
-  "author": {
-    "@type": "Person",
-    "name": author,
-    "url": authorUrl,
-    "image": authorImage ? `${siteUrl}${authorImage}` : undefined,
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": siteName,
-    "logo": {
-      "@type": "ImageObject",
-      "url": `${siteUrl}/logo.png`, // Ajusta la ruta del logo
-    },
-  },
-  "image": fullImageUrl,
-  "keywords": keywords?.join(', '),
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": fullCanonicalUrl,
-  },
-};
+} = resolved;
+const robots = robotsValue(noindex, nofollow);
+const generatedSchema = 'entry' in props && props.entry && author
+  ? buildBlogPosting({
+      headline: title,
+      description,
+      url: resolved.canonical,
+      siteUrl,
+      image: resolved.imageUrl,
+      datePublished: metadata.date,
+      dateModified: metadata.modifiedDate,
+      author: {
+        name: author,
+        url: authorUrl,
+        image: props.entry.data.authorImage,
+        siteUrl,
+      },
+      publisher: siteName ? { name: siteName, siteUrl } : undefined,
+      keywords,
+    })
+  : undefined;
+const schemaGraph = providedSchema
+  ? (('@graph' in providedSchema) ? providedSchema : composeGraph(providedSchema))
+  : generatedSchema
+    ? composeGraph(generatedSchema)
+    : undefined;
 ---
-
-<!-- Title -->
 <title>{title}</title>
-
-<!-- Description -->
 {description && <meta name="description" content={description} />}
-
-<!-- Keywords -->
-{keywords && keywords.length > 0 && (
-  <meta name="keywords" content={keywords.join(', ')} />
-)}
-
-<!-- Robots -->
-{robotsContent && <meta name="robots" content={robotsContent} />}
-
-<!-- Open Graph / Facebook -->
+{keywords?.length && <meta name="keywords" content={keywords.join(', ')} />}
+{robots && <meta name="robots" content={robots} />}
 <meta property="og:type" content={ogType} />
 <meta property="og:title" content={title} />
 {description && <meta property="og:description" content={description} />}
-<meta property="og:image" content={fullImageUrl} />
+<meta property="og:image" content={resolved.imageUrl} />
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
 {siteName && <meta property="og:site_name" content={siteName} />}
-<meta property="og:locale" content={defaultLocale} />
-<meta property="og:url" content={fullCanonicalUrl} />
-
-<!-- Twitter -->
+<meta property="og:locale" content={locale ?? defaultLocale} />
+<meta property="og:url" content={resolved.canonical} />
 <meta name="twitter:card" content="summary_large_image" />
 {twitterSite && <meta name="twitter:site" content={twitterSite} />}
 {twitterCreator && <meta name="twitter:creator" content={twitterCreator} />}
 <meta name="twitter:title" content={title} />
 {description && <meta name="twitter:description" content={description} />}
-<meta name="twitter:image" content={fullTwitterImageUrl} />
-
-<!-- Canonical URL -->
-<link rel="canonical" href={fullCanonicalUrl} />
-
-<!-- Autor -->
+<meta name="twitter:image" content={resolved.twitterImageUrl} />
+{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+<link rel="canonical" href={resolved.canonical} />
 {author && <meta name="author" content={author} />}
-{authorUrl && <link rel="author" href={authorUrl} />}
-{authorImage && <meta name="author-image" content={`${siteUrl}${authorImage}`} />}
-
-<!-- Date -->
-<meta property="article:published_time" content={date.toISOString()} />
-{modifiedDate && (
-  <meta property="article:modified_time" content={modifiedDate} />
-)}
-
-<!-- Tags -->
-{tags && tags.length > 0 && tags.map((tag) => (
-  <meta property="article:tag" content={tag} />
-))}
-
-<!-- Schema.org (JSON-LD) -->
-<script type="application/ld+json" set:html={` ${JSON.stringify(schemaOrgJSON)} `}></script>
-
-
-<!-- Favicon (opcional) -->
-<link rel="icon" type="image/png" href={`${siteUrl}/favicon.png`} />
-
-<!-- Theme Color (opcional) -->
-<meta name="theme-color" content="#ffffff" />
-
-<!-- Viewport (opcional) -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{authorUrl && <link rel="author" href={absoluteUrl(authorUrl, siteUrl)} />}
+{resolved.publishedDate && <meta property="article:published_time" content={resolved.publishedDate} />}
+{metadata.modifiedDate && <meta property="article:modified_time" content={resolved.modified} />}
+{tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+{schemaGraph && <script is:inline type="application/ld+json" set:html={serializeJsonLd(schemaGraph)} />}
+{favicon && <link rel="icon" href={absoluteUrl(favicon, siteUrl)} />}
