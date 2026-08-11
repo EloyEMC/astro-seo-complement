@@ -101,6 +101,12 @@ export default defineConfig({
 
 Install `@astrojs/sitemap` and add it once when the site needs a sitemap. `astroSeo()` validates defaults only; it does not replace `site` or modify posts/pages. `robots.txt`, RSS, and hreflang remain application concerns.
 
+## Security and dependency checks
+
+The CI workflow already runs `pnpm audit --audit-level=high` alongside the test, type-check, and build commands. GitHub also provides CodeQL analysis, Dependabot update proposals, and Dependency Review for pull requests through the repository workflows.
+
+Secret scanning and push protection must be enabled manually in the repository's **Settings**. Availability can depend on the repository's GitHub plan, and some configurations require GitHub Advanced Security. These features are not considered enabled until the remote repository confirms their status.
+
 ## Development
 
 ```sh
