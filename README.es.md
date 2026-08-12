@@ -3,7 +3,7 @@
 [![CI](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/ci.yml/badge.svg)](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/codeql.yml/badge.svg)](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/codeql.yml)
 [![npm](https://img.shields.io/npm/v/astro-seo-complement)](https://www.npmjs.com/package/astro-seo-complement)
-[![Licencia](https://img.shields.io/npm/l/astro-seo-complement)](./LICENSE)
+[![Licencia](https://img.shields.io/github/license/EloyEMC/astro-seo-complement)](./LICENSE)
 
 Metadatos SEO explícitos y tipados, más builders de Schema.org y JSON-LD para Astro. Construí metadatos a partir de hechos reales del contenido, componé grafos relacionados y serializá JSON-LD de forma segura, sin inyección automática de SEO ni afirmaciones inventadas.
 
