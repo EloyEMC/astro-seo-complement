@@ -1,9 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
 	buildArticle,
-	buildProduct,
-	composeGraph,
+	buildAggregateOffer,
 	buildAggregateRating,
+	buildBlogPosting,
+	buildBreadcrumbList,
+	buildFAQPage,
+	buildHowTo,
+	buildNewsArticle,
+	buildOffer,
+	buildOrganization,
+	buildPerson,
+	buildProduct,
+	buildProfilePage,
+	buildReview,
+	buildWebPage,
+	buildWebSite,
+	composeGraph,
 } from "../src/schemas";
 
 describe("JSON-LD builders", () => {
@@ -109,5 +122,138 @@ describe("JSON-LD builders", () => {
 			ratingValue: 4.8,
 			ratingCount: 12,
 		});
+	});
+
+	it.each([
+		[
+			"person",
+			buildPerson({ name: "Ada", siteUrl: "https://example.com", url: "/ada" }),
+		],
+		[
+			"organization",
+			buildOrganization({
+				name: "Example",
+				siteUrl: "https://example.com",
+				url: "/org",
+			}),
+		],
+		[
+			"website",
+			buildWebSite({
+				name: "Example",
+				url: "/",
+				siteUrl: "https://example.com",
+				publisher: { name: "Example" },
+			}),
+		],
+		[
+			"profile page",
+			buildProfilePage({
+				name: "Ada's profile",
+				url: "/authors/ada",
+				siteUrl: "https://example.com",
+				mainEntity: { name: "Ada" },
+			}),
+		],
+		[
+			"web page",
+			buildWebPage({
+				name: "About",
+				url: "/about",
+				siteUrl: "https://example.com",
+			}),
+		],
+		[
+			"blog posting",
+			buildBlogPosting({
+				headline: "A post",
+				author: { name: "Ada" },
+				siteUrl: "https://example.com",
+			}),
+		],
+		[
+			"news article",
+			buildNewsArticle({
+				headline: "Breaking news",
+				author: "Ada",
+				siteUrl: "https://example.com",
+			}),
+		],
+		[
+			"offer",
+			buildOffer({
+				price: 10,
+				priceCurrency: "USD",
+				siteUrl: "https://example.com",
+			}),
+		],
+		[
+			"aggregate offer",
+			buildAggregateOffer({
+				lowPrice: 10,
+				highPrice: 20,
+				offerCount: 2,
+				priceCurrency: "USD",
+				siteUrl: "https://example.com",
+				offers: [{ price: 10, priceCurrency: "USD" }],
+			}),
+		],
+		[
+			"review",
+			buildReview({ author: "Ada", reviewRating: { ratingValue: 5 } }),
+		],
+		["FAQ page", buildFAQPage([{ question: "What?", answer: "This." }])],
+		[
+			"how-to",
+			buildHowTo({
+				name: "Make tea",
+				steps: [{ name: "Boil water", text: "Boil it." }],
+			}),
+		],
+	] satisfies Array<
+		[string, unknown]
+	>)("covers every public builder with valid JSON-LD structure", (_, node) => {
+		expect(node).toMatchObject({ "@context": "https://schema.org" });
+		expect(node).toEqual(
+			expect.objectContaining({ "@type": expect.any(String) }),
+		);
+		expect(JSON.stringify(node)).not.toContain("undefined");
+	});
+
+	it("preserves semantic positions and nested entities", () => {
+		const breadcrumbs = buildBreadcrumbList(
+			[{ name: "Home", item: "/" }, { name: "Docs" }],
+			"https://example.com",
+		);
+		const faq = buildFAQPage([{ question: "What?", answer: "This." }]);
+		const howTo = buildHowTo({
+			name: "Make tea",
+			steps: [
+				{ name: "Boil water", text: "Boil it." },
+				{ name: "Steep", text: "Wait." },
+			],
+		});
+		const aggregate = buildAggregateOffer({
+			lowPrice: 10,
+			highPrice: 20,
+			offerCount: 2,
+			priceCurrency: "USD",
+			offers: [{ price: 10, priceCurrency: "USD" }],
+		});
+
+		expect(breadcrumbs.itemListElement).toMatchObject([
+			{ position: 1, item: "https://example.com/" },
+			{ position: 2, name: "Docs" },
+		]);
+		expect(faq.mainEntity).toMatchObject([
+			{ "@type": "Question", acceptedAnswer: { text: "This." } },
+		]);
+		expect(howTo.step).toMatchObject([
+			{ position: 1, name: "Boil water" },
+			{ position: 2, name: "Steep" },
+		]);
+		expect(aggregate.offers).toMatchObject([
+			{ "@type": "Offer", price: 10, priceCurrency: "USD" },
+		]);
 	});
 });

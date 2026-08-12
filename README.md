@@ -113,17 +113,26 @@ The CI workflow already runs `pnpm audit --audit-level=high` alongside the test,
 
 Secret scanning and push protection must be enabled manually in the repository's **Settings**. Availability can depend on the repository's GitHub plan, and some configurations require GitHub Advanced Security. These features are not considered enabled until the remote repository confirms their status.
 
-## Development
+## Schema validation workflow
+
+Run the local checks first:
 
 ```sh
 pnpm test
 pnpm check
 pnpm build
 pnpm exec astro build
-npm pack --dry-run --json
 ```
 
-Validate generated structured data with Google's Rich Results Test and Schema Markup Validator. Consult current Google documentation because eligibility rules change.
+The local structural tests verify the generated schema shape, required fields, serialization, and supported builder behavior. They do not reproduce Google's external eligibility rules, guarantee rich-result display, or guarantee ranking.
+
+For manual external validation, build a consumer page that uses the package, make that built page available at a testable URL, and submit the URL to both [Google's Rich Results Test](https://search.google.com/test/rich-results) and [Schema Markup Validator](https://validator.schema.org/). Review and correct the generated structured data in the consumer project. These services are external checks and are not automated by this package.
+
+## Development
+
+```sh
+npm pack --dry-run --json
+```
 
 ## License
 

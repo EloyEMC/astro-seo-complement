@@ -107,17 +107,26 @@ El workflow de CI ya ejecuta `pnpm audit --audit-level=high` junto con los coman
 
 El escaneo de secretos y la protección contra push deben activarse manualmente en **Settings** del repositorio. La disponibilidad puede depender del plan de GitHub y algunas configuraciones requieren GitHub Advanced Security. Estas funciones no se consideran activadas hasta que el repositorio remoto confirme su estado.
 
-## Desarrollo
+## Flujo de validación de schemas
+
+Ejecute primero las comprobaciones locales:
 
 ```sh
 pnpm test
 pnpm check
 pnpm build
 pnpm exec astro build
-npm pack --dry-run --json
 ```
 
-Validá los datos estructurados con Google's Rich Results Test y Schema Markup Validator. Consultá la documentación vigente de Google porque las reglas de aptitud cambian.
+Las pruebas estructurales locales verifican la forma del schema generado, los campos obligatorios, la serialización y el comportamiento de los builders compatibles. No reproducen las reglas externas de aptitud de Google ni garantizan la aparición en resultados enriquecidos o el posicionamiento.
+
+Para la validación externa manual, genere una página consumidora que use el paquete, haga que la página compilada esté disponible en una URL comprobable y envíe esa URL tanto a [Google's Rich Results Test](https://search.google.com/test/rich-results) como a [Schema Markup Validator](https://validator.schema.org/). Revise y corrija los datos estructurados generados en el proyecto consumidor. Estos servicios son comprobaciones externas y el paquete no las automatiza.
+
+## Desarrollo
+
+```sh
+npm pack --dry-run --json
+```
 
 ## Licencia
 
