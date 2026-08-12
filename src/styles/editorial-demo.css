@@ -261,6 +261,57 @@ pre {
 	color: var(--demo-paper);
 	font-size: 0.78rem;
 }
+.schema-inspector > p {
+	max-width: 48rem;
+}
+.schema-tree {
+	max-width: 100%;
+	overflow-x: auto;
+	border: 1px solid var(--demo-line);
+	padding: 1rem;
+	background: #0c0c0b;
+	font:
+		0.78rem / 1.6 ui-monospace,
+		SFMono-Regular,
+		Menlo,
+		monospace;
+}
+.schema-tree details {
+	margin: 0.15rem 0;
+}
+.schema-tree summary,
+.schema-raw summary {
+	cursor: pointer;
+	color: var(--demo-paper);
+}
+.schema-tree summary::marker,
+.schema-raw summary::marker {
+	color: var(--demo-gold);
+}
+.schema-children {
+	margin: 0.2rem 0 0.2rem 1.25rem;
+	padding-left: 1rem;
+	border-left: 1px solid var(--demo-line);
+	list-style: none;
+}
+.schema-key {
+	color: var(--demo-gold);
+}
+.schema-type {
+	color: var(--demo-muted);
+}
+.schema-string {
+	color: #b9d69b;
+}
+.schema-value {
+	color: #d9a7c7;
+}
+.schema-raw {
+	margin-top: 1rem;
+}
+.schema-raw pre {
+	margin-bottom: 0;
+}
 .steps {
 	padding-left: 1.5rem;
 }

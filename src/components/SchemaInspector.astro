@@ -6,8 +6,58 @@ interface Props { schema: SchemaGraph }
 const { schema } = Astro.props;
 const formatted = serializeJsonLd(schema);
 ---
-<details class="panel" style="margin-top: 2.5rem">
-  <summary><strong>Inspect generated JSON-LD</strong></summary>
-  <p>This is the same schema graph emitted by <code>SEO.astro</code>; the demo only formats it for readable inspection.</p>
-  <pre><code>{formatted}</code></pre>
-</details>
+    <details class="panel schema-inspector" style="margin-top: 2.5rem">
+      <summary><strong>Inspect generated JSON-LD</strong></summary>
+      <p>This is the same schema graph emitted by <code>SEO.astro</code>. Expand each branch to inspect the graph as a tree.</p>
+      <div class="schema-tree" data-schema-tree aria-label="Generated JSON-LD tree"></div>
+      <details class="schema-raw">
+        <summary>View raw JSON</summary>
+        <pre><code>{formatted}</code></pre>
+      </details>
+      <script type="application/json" data-schema-source set:html={formatted} is:inline />
+      <script>
+        const source = document.querySelector('[data-schema-source]');
+        const tree = document.querySelector('[data-schema-tree]');
+        if (source && tree) {
+          const value = JSON.parse(source.textContent ?? 'null');
+          const primitive = (item: unknown) => {
+            const output = document.createElement('span');
+            output.className = typeof item === 'string' ? 'schema-string' : 'schema-value';
+            output.textContent = typeof item === 'string' ? `"${item}"` : String(item);
+            return output;
+          };
+          const branch = (item: unknown, label = '') => {
+            const wrapper = document.createElement('details');
+            wrapper.open = label === '@graph' || label === '@context';
+            const summary = document.createElement('summary');
+            if (label) {
+              const key = document.createElement('span');
+              key.className = 'schema-key';
+              key.textContent = label;
+              summary.append(key, document.createTextNode(': '));
+            }
+            if (item !== null && typeof item === 'object') {
+              const type = Array.isArray(item) ? `Array(${item.length})` : 'Object';
+              const typeLabel = document.createElement('span');
+              typeLabel.className = 'schema-type';
+              typeLabel.textContent = type;
+              summary.append(typeLabel);
+              wrapper.append(summary);
+              const list = document.createElement('ul');
+              list.className = 'schema-children';
+              Object.entries(item).forEach(([key, child]) => {
+                const entry = document.createElement('li');
+                entry.append(branch(child, Array.isArray(item) ? `[${key}]` : key));
+                list.append(entry);
+              });
+              wrapper.append(list);
+            } else {
+              summary.append(primitive(item));
+              wrapper.append(summary);
+            }
+            return wrapper;
+          };
+          tree.append(branch(value));
+        }
+      </script>
+    </details>
