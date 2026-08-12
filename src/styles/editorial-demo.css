@@ -205,6 +205,26 @@ a:focus-visible {
 .card {
 	min-height: 10rem;
 }
+figure {
+	max-width: 100%;
+	margin: 2rem 0;
+}
+figure img {
+	display: block;
+	width: min(100%, 60rem);
+	height: auto;
+	max-height: 70vh;
+	margin: 0 auto;
+	object-fit: contain;
+}
+figcaption {
+	max-width: 60rem;
+	margin: 0.75rem auto 0;
+	color: var(--demo-muted);
+	font:
+		0.72rem / 1.5 Arial,
+		sans-serif;
+}
 .card h2,
 .card h3 {
 	margin-top: 0;
@@ -343,6 +363,7 @@ pre {
 	border: 1px solid rgba(199, 154, 87, 0.6);
 	border-radius: 50%;
 	object-fit: cover;
+	object-position: center center;
 	filter: saturate(0.88);
 }
 .author-box .demo-eyebrow {
