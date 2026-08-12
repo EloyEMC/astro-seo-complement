@@ -1,35 +1,35 @@
 # astro-seo-complement
 
-Typed, reusable SEO metadata and JSON-LD tools for Astro. This is an independent community package, not an official Astro package.
+[![CI](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/ci.yml/badge.svg)](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/codeql.yml/badge.svg)](https://github.com/EloyEMC/astro-seo-complement/actions/workflows/codeql.yml)
+[![npm](https://img.shields.io/npm/v/astro-seo-complement)](https://www.npmjs.com/package/astro-seo-complement)
+[![License](https://img.shields.io/npm/l/astro-seo-complement)](./LICENSE)
 
-## Quick path
+Typed, explicit SEO metadata and Schema.org JSON-LD builders for Astro. Build page metadata from real content facts, compose connected graphs, and serialize JSON-LD safely—without automatic SEO injection or invented claims.
+
+This is an independent community package, not an official Astro package.
+
+## Why use it?
+
+- **Explicit metadata:** titles, descriptions, canonical URLs, social cards, robots directives, authors, and dates come from values you provide.
+- **Typed Schema.org builders:** create common nodes such as `Article`, `Product`, `FAQPage`, `HowTo`, `ImageObject`, and `VideoObject` with TypeScript support.
+- **Composable graphs:** combine related nodes with `composeGraph` instead of maintaining disconnected JSON-LD blobs.
+- **Safe serialization:** supplied schema is serialized safely into JSON-LD, including characters that could otherwise break an inline script.
+- **Media and author support:** model image/video facts explicitly and render an accessible author box for blog entries that include author data.
+
+## Who it is for
+
+Astro teams that want a small, typed layer for page metadata and structured data while keeping content, canonical URLs, validation, and application-specific SEO decisions under their control.
+
+It does **not** provide ranking guarantees, automatic SEO injection, sitemap/RSS/robots generation, or every Schema.org type.
+
+## Quick start
 
 ```sh
 pnpm add astro-seo-complement
 ```
 
-`astroSeo()` only validates integration defaults. It does not replace Astro's `site` setting, modify posts or pages, or inject SEO automatically.
-
-## Explicit SEO component
-
-Use `entry` for the existing blog flow. The component generates a `BlogPosting` only when the blog entry has an author. For pages and products, pass explicit metadata; `title` is required when `entry` is absent. Pass the correct schema explicitly because the content—not the URL—determines its Schema.org type.
-
-### Blog entry and BlogPosting
-
-```astro
----
-import SEO from 'astro-seo-complement/SEO.astro';
-const { post } = Astro.props;
----
-<SEO
-  entry={post}
-  siteUrl="https://example.com"
-  siteName="Example"
-  defaultImage="/og-default.png"
-/>
-```
-
-### Generic page with WebPage and Organization
+Use the `SEO` component in a page or layout. This example creates one connected `WebPage` + `Organization` graph and passes it explicitly to the component:
 
 ```astro
 ---
@@ -38,72 +38,71 @@ import { buildOrganization, buildWebPage, composeGraph } from 'astro-seo-complem
 
 const siteUrl = 'https://example.com';
 const schema = composeGraph(
-  buildWebPage({ url: '/about', siteUrl, name: 'About us', description: 'Our team' }),
-  buildOrganization({ name: 'Example Inc.', url: siteUrl, siteUrl }),
+  buildWebPage({
+    url: '/about',
+    siteUrl,
+    name: 'About us',
+    description: 'Meet the Example team',
+  }),
+  buildOrganization({
+    name: 'Example Inc.',
+    url: siteUrl,
+    siteUrl,
+  }),
 );
 ---
-<SEO title="About us" description="Our team" canonicalUrl="/about" siteUrl={siteUrl} schema={schema} />
+<SEO
+  title="About us"
+  description="Meet the Example team"
+  canonicalUrl="/about"
+  siteUrl={siteUrl}
+  schema={schema}
+/>
 ```
 
-### Product with an Offer and no fictional ratings
+For the existing blog flow, pass `entry` instead. `BlogPosting` is generated only when the entry has an author. When `entry` is absent, `title` is required and the schema type must be passed explicitly because content—not the URL—determines its Schema.org type.
 
-```astro
----
-import SEO from 'astro-seo-complement/SEO.astro';
-import { buildProduct } from 'astro-seo-complement';
+## Metadata and schema boundaries
 
-const siteUrl = 'https://example.com';
-const schema = buildProduct({
-  name: 'Widget', url: '/products/widget', siteUrl,
-  description: 'A real widget',
-  offers: { price: 29.99, priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
-});
----
-<SEO title="Widget" description="A real widget" image="/widget.png" siteUrl={siteUrl} schema={schema} />
-```
+| The package provides | Your application still owns |
+|---|---|
+| URL and date normalization | Astro's canonical `site` setting |
+| HTML meta tags, Open Graph, and Twitter fields | Sitemap, `robots.txt`, RSS, and hreflang |
+| Canonical URL and requested robots directives | Content accuracy and the schema type for each page |
+| Safe JSON-LD serialization when `schema` is supplied | Google validation, eligibility, crawling, and indexing |
+| `BlogPosting` for an authored `entry` | Ranking or rich-result guarantees |
 
 Supported explicit metadata includes `title`, `description`, `image`, `imageAlt`, `canonicalUrl`, `locale`, `author`, `authorUrl`, `date`, `modifiedDate`, `tags`, and `keywords`, plus the existing social and robots fields.
 
-## Automatic vs explicit
+## Builders and composable graphs
 
-| Automatic | Explicit/manual |
-|---|---|
-| URL and date normalization | `Article`, `NewsArticle`, `Product`, `FAQ`, and `HowTo` schemas |
-| HTML meta tags | Breadcrumbs and `Organization` |
-| Canonical URL | Sitemap, `robots.txt`, RSS, and hreflang |
-| Robots directives when requested | Any schema not passed to `SEO` |
-| Safe JSON-LD serialization when `schema` is passed | All Schema.org types and Google ranking guarantees are **not included** |
-| `BlogPosting` only for `entry` with an author | |
+The package exports builders for:
 
-The component safely serializes supplied JSON-LD, but Google validation and eligibility are the consumer's responsibility. Structured data does not guarantee ranking, crawling, indexing, or rich-result display.
+- People and sites: `buildPerson`, `buildOrganization`, `buildWebSite`, `buildProfilePage`, `buildWebPage`
+- Navigation and publishing: `buildBreadcrumbList`, `buildArticle`, `buildBlogPosting`, `buildNewsArticle`
+- Commerce and reviews: `buildOffer`, `buildAggregateOffer`, `buildAggregateRating`, `buildReview`, `buildProduct`
+- Media and instructional content: `buildImageObject`, `buildVideoObject`, `buildFAQPage`, `buildHowTo`
+- Composition: `composeGraph`
 
-## Builders and escape hatch
+Use `SchemaNode` with `composeGraph` as the escape hatch for additional Schema.org types. Builders do not invent ratings, reviews, prices, URLs, or media locations; pass facts that exist in the consumer project.
 
-Exports include `buildPerson`, `buildOrganization`, `buildWebSite`, `buildProfilePage`, `buildWebPage`, `buildBreadcrumbList`, `buildArticle`, `buildBlogPosting`, `buildNewsArticle`, `buildOffer`, `buildAggregateOffer`, `buildAggregateRating`, `buildReview`, `buildProduct`, `buildImageObject`, `buildVideoObject`, `buildFAQPage`, `buildHowTo`, and `composeGraph`. Use `SchemaNode` and `composeGraph` as the escape hatch for additional Schema.org types. Builders do not invent ratings, reviews, prices, or URLs.
+## See it in action
 
-    ## Image, video, and author examples
+The [live demo](https://astro-seo-complement.pages.dev/) pairs semantic HTML with explicit metadata and an inspectable JSON-LD graph. Open a route and use its **JSON-LD inspector/tree** to compare visible content, page source, and graph relationships.
 
-    Image SEO is explicit: render an image with meaningful `alt`, `width`, `height`, and a caption, then use the same absolute-resolvable URL in `buildImageObject` and the page schema. The demo shows this on [`/product/`](https://astro-seo-complement.pages.dev/product/) and [`/reviews/`](https://astro-seo-complement.pages.dev/reviews/).
+- [About and site identity](https://astro-seo-complement.pages.dev/about/)
+- [Blog entries and author support](https://astro-seo-complement.pages.dev/blog/)
+- [Editorial `NewsArticle`](https://astro-seo-complement.pages.dev/editorial/)
+- [Product and offers](https://astro-seo-complement.pages.dev/product/)
+- [Images and reviews](https://astro-seo-complement.pages.dev/reviews/)
+- [FAQPage](https://astro-seo-complement.pages.dev/faq/)
+- [HowTo](https://astro-seo-complement.pages.dev/how-to/)
+- [BreadcrumbList](https://astro-seo-complement.pages.dev/breadcrumbs/)
+- [Unavailable video-media state](https://astro-seo-complement.pages.dev/video/)
 
-    ```ts
-    import { buildImageObject, buildVideoObject } from 'astro-seo-complement';
+The [integration tutorial](https://astro-seo-complement.pages.dev/how-to/) covers `SEO.astro`, builders, `composeGraph`, content alignment, and validation. Image metadata is demonstrated on the [product](https://astro-seo-complement.pages.dev/product/) and [reviews](https://astro-seo-complement.pages.dev/reviews/) routes. Blog entries with `author`, `authorUrl`, and `authorImage` render a reusable accessible author box.
 
-    const image = buildImageObject({
-      name: 'Product cover', contentUrl: '/product-cover.svg',
-      caption: 'Factual image caption', width: 1200, height: 800, siteUrl,
-    });
-    const video = buildVideoObject({
-      name: 'Walkthrough', description: 'A factual description',
-      thumbnailUrl: '/video-poster.svg', uploadDate: '2025-01-01', siteUrl,
-      // Add contentUrl or embedUrl only when that URL actually exists.
-    });
-    ```
-
-    Blog entries with `author`, `authorUrl`, and `authorImage` render a reusable accessible author box with the publication date and a concise maintainer bio. See the [`/blog/`](https://astro-seo-complement.pages.dev/blog/) route.
-
-    The complete [`/how-to/`](https://astro-seo-complement.pages.dev/how-to/) integration tutorial covers installation, `SEO.astro`, builders, `composeGraph`, content alignment, and validation. The [`/video/`](https://astro-seo-complement.pages.dev/video/) route documents an unavailable media state without inventing a video URL.
-
-    ## Astro integration and sitemap
+## Astro integration and sitemap
 
 Keep the canonical site in `astro.config.mjs` and add the optional integration separately:
 
@@ -121,40 +120,35 @@ export default defineConfig({
 });
 ```
 
-Install `@astrojs/sitemap` and add it once when the site needs a sitemap. `astroSeo()` validates defaults only; it does not replace `site` or modify posts/pages. `robots.txt`, RSS, and hreflang remain application concerns.
+Install `@astrojs/sitemap` only when the site needs a sitemap. `astroSeo()` validates integration defaults; it does not replace `site`, modify posts or pages, or inject SEO automatically.
 
-## Astro compatibility
+## Compatibility
 
-The package declares support for Astro `>=5.0.0 <8.0.0`. CI checks the package against Astro 5, 6, and 7 on Node 22 with pnpm 10.12.1. Each run selects the latest available release in that major version, so the matrix provides ongoing coverage as Astro patch releases change.
+- Astro: `>=5.0.0 <8.0.0`
+- CI matrix: Astro 5, 6, and 7
+- CI runtime: Node 22 with pnpm 10.12.1
+- Package engine: Node `>=18.17.0`
 
-This matrix verifies the package's tests, type-check, package build, and example Astro build. It does not guarantee compatibility with every Astro integration, adapter, or application-specific configuration. Keep Astro within the declared peer-dependency range and validate the complete consumer project separately.
+CI runs the package tests, type-check, package build, example Astro build, audit, and pack validation. The matrix selects the latest available release in each supported Astro major, so it does not guarantee compatibility with every integration, adapter, or application configuration. Validate the complete consumer project separately.
 
-## Security and dependency checks
+## Validation limits
 
-The CI workflow already runs `pnpm audit --audit-level=high` alongside the test, type-check, and build commands. GitHub also provides CodeQL analysis, Dependabot update proposals, and Dependency Review for pull requests through the repository workflows.
+Local structural tests verify generated schema shape, required fields, serialization, and supported builder behavior. They do not reproduce Google's external eligibility rules or guarantee ranking, crawling, indexing, or rich-result display.
 
-Secret scanning and push protection must be enabled manually in the repository's **Settings**. Availability can depend on the repository's GitHub plan, and some configurations require GitHub Advanced Security. These features are not considered enabled until the remote repository confirms their status.
-
-## Schema validation workflow
-
-Run the local checks first:
-
-```sh
-pnpm test
-pnpm check
-pnpm build
-pnpm exec astro build
-```
-
-The local structural tests verify the generated schema shape, required fields, serialization, and supported builder behavior. They do not reproduce Google's external eligibility rules, guarantee rich-result display, or guarantee ranking.
-
-For manual external validation, build a consumer page that uses the package, make that built page available at a testable URL, and submit the URL to both [Google's Rich Results Test](https://search.google.com/test/rich-results) and [Schema Markup Validator](https://validator.schema.org/). Review and correct the generated structured data in the consumer project. These services are external checks and are not automated by this package.
+For manual external validation, make a consumer page available at a testable URL and submit it to [Google's Rich Results Test](https://search.google.com/test/rich-results) and [Schema Markup Validator](https://validator.schema.org/). Correct the generated structured data in the consumer project; these external checks are not automated by this package.
 
 ## Development
 
 ```sh
+pnpm install
+pnpm test
+pnpm check
+pnpm build
+pnpm exec astro build
 npm pack --dry-run --json
 ```
+
+GitHub Actions also runs `pnpm audit --audit-level=high`, CodeQL, and dependency review workflows. Secret scanning and push protection must be enabled manually in the repository settings when available for the repository's GitHub plan.
 
 ## License
 

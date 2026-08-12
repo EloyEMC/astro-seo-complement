@@ -19,7 +19,7 @@ const blog = defineCollection({
 		twitterSite: z.string().optional(),
 		canonicalUrl: z.string().optional(),
 		author: z.string().optional(),
-		authorUrl: z.url().optional(),
+		authorUrl: z.string().url().optional(),
 		authorImage: z.string().optional(),
 		ogType: z.enum(["website", "article"]).default("article"),
 		locale: z.string().optional(),
@@ -38,7 +38,7 @@ const product = defineCollection({
 		sku: z.string().optional(),
 		price: z.number().nonnegative().optional(),
 		priceCurrency: z.string().length(3).optional(),
-		availability: z.url().optional(),
+		availability: z.string().url().optional(),
 		draft: z.boolean().default(false),
 	}),
 });
