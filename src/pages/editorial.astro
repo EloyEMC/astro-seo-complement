@@ -2,13 +2,25 @@
 import DemoLayout from '../layouts/DemoLayout.astro';
 import { siteConfig } from '../config';
 import { buildBreadcrumbList, buildNewsArticle, buildOrganization, buildWebPage, composeGraph } from '../schemas';
+const title = 'Why structured data belongs beside the content';
+const description = 'An editorial look at aligning visible content, metadata, and JSON-LD without treating markup as a substitute for useful writing.';
 const schema = composeGraph(
-  buildNewsArticle({ headline: 'Why structured data belongs beside the content', description: 'An editorial look at aligning visible content, metadata, and JSON-LD.', url: '/editorial/', siteUrl: siteConfig.site, datePublished: '2025-02-14', dateModified: '2025-02-20', author: { name: 'Editorial desk', url: '/about/', siteUrl: siteConfig.site }, publisher: { name: 'astro-seo-complement maintainers', url: siteConfig.site }, articleSection: 'Web development', keywords: ['structured data', 'Astro', 'SEO'], inLanguage: 'en-US' }),
-  buildWebPage({ url: '/editorial/', siteUrl: siteConfig.site, name: 'Why structured data belongs beside the content', description: 'An editorial article about aligned content and metadata.' }),
+  buildNewsArticle({ headline: title, description, url: '/editorial/', siteUrl: siteConfig.site, datePublished: '2025-02-14', dateModified: '2025-02-20', author: { name: 'Demo editorial desk', url: '/about/', siteUrl: siteConfig.site }, publisher: { name: 'astro-seo-complement maintainers', url: siteConfig.site }, articleSection: 'Web development', keywords: ['structured data', 'Astro', 'SEO'], inLanguage: 'en-US' }),
+  buildWebPage({ url: '/editorial/', siteUrl: siteConfig.site, name: title, description }),
   buildOrganization({ name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site }),
   buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Editorial', item: '/editorial/' }], siteConfig.site),
 );
 ---
-<DemoLayout title="Why structured data belongs beside the content" description="A NewsArticle example with dates, author, publisher, section, and keywords." canonicalUrl="/editorial/" schema={schema} ogType="article" eyebrow="Editorial article">
-  <article class="panel"><p><strong>Editorial desk · February 14, 2025</strong></p><p>Search engines can only interpret what a page communicates consistently. That is why this article's headline, summary, author, publisher, and publication dates appear both in the readable document and in its NewsArticle graph.</p><h2>Make the relationship obvious</h2><p>Metadata is not a substitute for useful writing. It is a concise contract between the page and its consumers: the canonical URL identifies the document, Open Graph describes sharing, and JSON-LD makes relationships explicit.</p><h2>Inspect the alignment</h2><p>Use the JSON-LD panel below, then view source. The <code>NewsArticle</code> node is composed with a WebPage, Organization, and BreadcrumbList.</p></article>
+<DemoLayout title={title} description={description} canonicalUrl="/editorial/" schema={schema} ogType="article" eyebrow="Editorial article">
+  <article class="panel">
+    <p><strong>Demo editorial desk · February 14, 2025 · Updated February 20, 2025</strong></p>
+    <p>A page has a clearer relationship with search engines and social platforms when its readable content and structured description agree. That does not mean adding more markup to every page. It means giving important facts one deliberate home and reusing them consistently.</p>
+    <h2>Useful writing comes first</h2>
+    <p>Metadata cannot rescue a vague article. Start with a specific headline, a helpful summary, and sections that answer the reader's next question. Once those facts are stable, a schema graph can describe the page without inventing a second version of it.</p>
+    <h2>Make relationships explicit</h2>
+    <p>A canonical URL identifies the document. Open Graph describes how it should travel through a share. JSON-LD connects the article to its author, publisher, dates, and page. Each layer has a different job, but they should point to the same underlying facts.</p>
+    <h2>Inspect before publishing</h2>
+    <p>Use the inspection panel below, then view the generated source. This route composes a <code>NewsArticle</code> with a <code>WebPage</code>, <code>Organization</code>, and <code>BreadcrumbList</code>. The visible headline, summary, section, author label, and dates are intentionally synchronized with that graph.</p>
+    <p><a href="/blog/metadata-contract/">Read the metadata contract note</a> for the same idea applied to blog content.</p>
+  </article>
 </DemoLayout>

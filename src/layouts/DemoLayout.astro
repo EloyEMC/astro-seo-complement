@@ -19,7 +19,7 @@ interface Props {
 const { title, description, canonicalUrl, schema, ogType = 'website', keywords, eyebrow, uppercaseTitle = false } = Astro.props;
 const defaultImage = `${siteConfig.site}/og-default.svg`;
 const routes = [
-  ['/about/', 'About'], ['/blog/hello-world/', 'Blog'], ['/editorial/', 'Editorial'],
+  ['/about/', 'About'], ['/blog/', 'Blog'], ['/editorial/', 'Editorial'],
   ['/product/', 'Product'], ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'],
   ['/how-to/', 'How-to'], ['/breadcrumbs/', 'Breadcrumbs'],
 ];
@@ -29,6 +29,9 @@ const routes = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon-emc.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-emc.webp" type="image/webp" />
+    <link rel="apple-touch-icon" href="/favicon-emc.webp" />
     <SEO
       siteUrl={siteConfig.site}
       siteName={siteConfig.title}
@@ -70,7 +73,7 @@ const routes = [
         <slot />
         {schema && <SchemaInspector schema={schema} />}
       </main>
-      <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · A template powered by <code>astro-seo-complement</code> for comparing visible content, metadata, canonical URLs, and JSON-LD graphs.</footer>
+      <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · A template powered by <code>astro-seo-complement</code> for comparing visible content, metadata, canonical URLs, and JSON-LD graphs. <a href="/about/">About the project</a> · <a href="https://github.com/EloyEMC/astro-seo-complement">Source on GitHub</a></footer>
     </div>
   </body>
 </html>

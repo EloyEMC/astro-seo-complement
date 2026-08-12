@@ -5,7 +5,17 @@ import { buildProduct, buildReview, buildAggregateRating, composeGraph } from '.
 const review = { author: { name: 'Mina Patel', url: '/reviews/', siteUrl: siteConfig.site }, reviewRating: { ratingValue: 5, bestRating: 5 }, reviewBody: 'Clear examples make the relationship between page copy and JSON-LD easy to verify.', datePublished: '2025-01-18' };
 const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description: 'An inspectable guide to metadata and structured data.', url: '/product/', siteUrl: siteConfig.site, aggregateRating: { ratingValue: 4.8, reviewCount: 24, bestRating: 5 }, review }), buildAggregateRating({ ratingValue: 4.8, reviewCount: 24, bestRating: 5 }), buildReview({ ...review, siteUrl: siteConfig.site }));
 ---
-<DemoLayout title="Reviews that explain the value" description="A Product review example combining an AggregateRating with a detailed Review." canonicalUrl="/reviews/" schema={schema}>
-  <section class="panel"><p><span class="tag">4.8 / 5 · 24 reviews</span></p><blockquote>“Clear examples make the relationship between page copy and JSON-LD easy to verify.”</blockquote><p><strong>Mina Patel</strong> · January 18, 2025</p></section>
-  <h2>Two levels of social proof</h2><div class="grid"><article class="card"><h3>AggregateRating</h3><p>The summary communicates a 4.8 average from 24 reviews with a best rating of 5.</p></article><article class="card"><h3>Review</h3><p>The individual review adds an author, body, date, and explicit Rating node.</p></article></div>
+<DemoLayout title="Reviews that explain the value" description="A clearly labeled demo Product review example combining an AggregateRating with a detailed Review." canonicalUrl="/reviews/" schema={schema} eyebrow="Review schema · illustrative demo data">
+  <section class="panel">
+    <p><span class="tag">Illustrative demo data · not customer evidence</span></p>
+    <h2>One summary, one example review</h2>
+    <blockquote>“Clear examples make the relationship between page copy and JSON-LD easy to verify.”</blockquote>
+    <p><strong>Mina Patel · January 18, 2025</strong></p>
+    <p>This quote, author, date, and rating are fictional values included only to demonstrate the schema shape. They are not a claim about a real customer or product.</p>
+  </section>
+  <h2>Two levels of social proof</h2>
+  <div class="grid">
+    <article class="card"><h3>AggregateRating · 4.8 / 5</h3><p>The example summary communicates an average of 4.8 from 24 illustrative reviews, with 5 as the best possible rating.</p></article>
+    <article class="card"><h3>Review · 5 / 5</h3><p>The individual example adds an author, review body, publication date, and explicit Rating node. Each value is repeated visibly above.</p></article>
+  </div>
 </DemoLayout>

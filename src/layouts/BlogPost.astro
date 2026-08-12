@@ -11,7 +11,7 @@ interface Props {
 
 const { post, siteUrl, defaultImage } = Astro.props;
 const routes = [
-  ['/about/', 'About'], ['/editorial/', 'Editorial'], ['/product/', 'Product'],
+  ['/about/', 'About'], ['/editorial/', 'Editorial'],
   ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'], ['/how-to/', 'How-to'], ['/breadcrumbs/', 'Breadcrumbs'],
 ];
 ---
@@ -20,6 +20,9 @@ const routes = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/favicon-emc.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-emc.webp" type="image/webp" />
+    <link rel="apple-touch-icon" href="/favicon-emc.webp" />
     <SEO entry={post} siteUrl={siteUrl} defaultImage={defaultImage} siteName={post.data.siteName} />
   </head>
   <body class="demo-shell blog-layout">
@@ -33,7 +36,6 @@ const routes = [
         <nav class="demo-nav" aria-label="Demo routes">
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/blog/hello-world/">Blog</a></li>
             {routes.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
           </ul>
         </nav>
@@ -52,7 +54,7 @@ const routes = [
           <div class="blog-prose"><slot /></div>
         </article>
       </main>
-      <footer class="demo-footer"><strong>eloymartinezcuesta.com</strong> · Visible content powered by <code>astro-seo-complement</code> and aligned with BlogPosting JSON-LD.</footer>
+      <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · Visible content powered by <code>astro-seo-complement</code> and aligned with BlogPosting JSON-LD. <a href="/about/">About the project</a> · <a href="https://github.com/EloyEMC/astro-seo-complement">Source on GitHub</a></footer>
     </div>
   </body>
 </html>

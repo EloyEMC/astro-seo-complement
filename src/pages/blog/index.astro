@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import DemoLayout from '../../layouts/DemoLayout.astro';
+import { siteConfig } from '../../config';
+import { buildBreadcrumbList, buildWebPage, composeGraph } from '../../schemas';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const description = 'Editorial notes about Astro content, metadata, and structured data from the astro-seo-complement demo.';
+const schema = composeGraph(
+  buildWebPage({ url: '/blog/', siteUrl: siteConfig.site, name: 'Blog notes', description }),
+  buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Blog', item: '/blog/' }], siteConfig.site),
+);
+---
+<DemoLayout title="Blog notes" description={description} canonicalUrl="/blog/" schema={schema} eyebrow="Editorial notes">
+  <section class="panel">
+    <p class="tag">A small working collection</p>
+    <h2>Practical notes for inspectable Astro pages</h2>
+    <p>These posts explain the decisions behind the demo: useful content first, explicit metadata second, and JSON-LD that stays close to the facts readers can see.</p>
+  </section>
+  <section aria-labelledby="posts-title">
+    <h2 id="posts-title">All posts</h2>
+    <div class="grid">
+      {posts.map((post) => (
+        <article class="card">
+          <p class="demo-eyebrow">{post.data.tags?.join(' · ')}</p>
+          <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+          <p>{post.data.description}</p>
+          <p class="card-meta">{post.data.date.toISOString().slice(0, 10)} · {post.data.author}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</DemoLayout>

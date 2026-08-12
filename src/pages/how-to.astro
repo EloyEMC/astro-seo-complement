@@ -10,7 +10,8 @@ const steps = [
 ];
 const schema = composeGraph(buildHowTo({ name: 'Build an inspectable Astro SEO page', totalTime: 'PT20M', siteUrl: siteConfig.site, steps }));
 ---
-<DemoLayout title="Build an inspectable Astro SEO page" description="A four-step HowTo guide showing names, instructions, position, and total time." canonicalUrl="/how-to/" schema={schema}>
+<DemoLayout title="Build an inspectable Astro SEO page" description="A four-step HowTo guide showing names, instructions, position, and a twenty-minute total time." canonicalUrl="/how-to/" schema={schema} eyebrow="How-to schema">
+  <section class="panel"><p>Use this short workflow whenever a new route needs metadata and structured data. The four steps are deliberately ordered so markup describes content that already exists.</p><p><strong>Estimated time: 20 minutes</strong></p></section>
   <ol class="steps">{steps.map(({ name, text }) => <li><div><h2>{name}</h2><p>{text}</p></div></li>)}</ol>
-  <section class="panel"><h2>Why this sequence works</h2><p>Structured data should describe an already useful document. Writing, annotating, composing, and inspecting in that order keeps the markup honest and makes regressions easy to spot.</p></section>
+  <section class="panel"><h2>Why this sequence works</h2><p>Writing, annotating, composing, and inspecting in that order keeps the markup honest. It also gives a reviewer a simple way to compare the page, metadata, and graph before a route ships.</p></section>
 </DemoLayout>

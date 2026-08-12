@@ -4,7 +4,8 @@ import { siteConfig } from '../config';
 import { buildBreadcrumbList, buildWebPage, composeGraph } from '../schemas';
 const schema = composeGraph(buildWebPage({ url: '/breadcrumbs/', siteUrl: siteConfig.site, name: 'Breadcrumb navigation example', description: 'A page that exposes its hierarchy as a BreadcrumbList.' }), buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Guides', item: '/how-to/' }, { name: 'Breadcrumbs', item: '/breadcrumbs/' }], siteConfig.site));
 ---
-<DemoLayout title="Breadcrumb navigation" description="A focused BreadcrumbList example for a three-level content hierarchy." canonicalUrl="/breadcrumbs/" schema={schema}>
+<DemoLayout title="Breadcrumb navigation" description="A focused BreadcrumbList example for a three-level content hierarchy." canonicalUrl="/breadcrumbs/" schema={schema} eyebrow="BreadcrumbList schema">
   <nav aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/how-to/">Guides</a></li><li aria-current="page">Breadcrumbs</li></ol></nav>
-  <section class="panel"><h2>Make hierarchy explicit</h2><p>The breadcrumb is visible, keyboard-accessible navigation and the schema graph mirrors its exact order. The final item identifies the current page and does not need a link.</p></section>
+  <section class="panel"><h2>Make the hierarchy explicit</h2><p>This page sits below the site's home page and the Guides section represented by the How-to route. The visible breadcrumb is keyboard-accessible navigation, and the schema graph mirrors its exact order.</p><p>The final item identifies the current page and does not need a link. Keeping that rule consistent makes the hierarchy clear to both readers and structured-data consumers.</p></section>
+  <section class="grid"><article class="card"><h3>For readers</h3><p>A breadcrumb answers “where am I?” and offers a short route back to a broader section.</p></article><article class="card"><h3>For the graph</h3><p>The <code>BreadcrumbList</code> records each position and URL using the same labels shown in the navigation.</p></article></section>
 </DemoLayout>
