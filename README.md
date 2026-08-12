@@ -101,6 +101,12 @@ export default defineConfig({
 
 Install `@astrojs/sitemap` and add it once when the site needs a sitemap. `astroSeo()` validates defaults only; it does not replace `site` or modify posts/pages. `robots.txt`, RSS, and hreflang remain application concerns.
 
+## Astro compatibility
+
+The package declares support for Astro `>=5.0.0 <8.0.0`. CI checks the package against Astro 5, 6, and 7 on Node 22 with pnpm 10.12.1. Each run selects the latest available release in that major version, so the matrix provides ongoing coverage as Astro patch releases change.
+
+This matrix verifies the package's tests, type-check, package build, and example Astro build. It does not guarantee compatibility with every Astro integration, adapter, or application-specific configuration. Keep Astro within the declared peer-dependency range and validate the complete consumer project separately.
+
 ## Security and dependency checks
 
 The CI workflow already runs `pnpm audit --audit-level=high` alongside the test, type-check, and build commands. GitHub also provides CodeQL analysis, Dependabot update proposals, and Dependency Review for pull requests through the repository workflows.
