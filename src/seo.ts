@@ -39,7 +39,7 @@ export function resolveSeoMetadata(
 	metadata: SeoMetadata,
 	siteUrl: string,
 	pathname = "/",
-	defaultImage = "/og-default.png",
+	defaultImage = "/og-default.svg",
 ): ResolvedSeoMetadata {
 	const canonical = metadata.canonicalUrl
 		? absoluteUrl(metadata.canonicalUrl, siteUrl)

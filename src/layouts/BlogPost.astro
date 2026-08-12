@@ -12,8 +12,9 @@ interface Props {
 
 const { post, siteUrl, defaultImage } = Astro.props;
 const routes = [
-  ['/about/', 'About'], ['/editorial/', 'Editorial'],
-  ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'], ['/how-to/', 'How-to'], ['/video/', 'Video SEO'], ['/breadcrumbs/', 'Breadcrumbs'],
+  ['/about/', 'About'], ['/blog/', 'Blog'], ['/editorial/', 'Editorial'],
+  ['/product/', 'Product'], ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'],
+  ['/how-to/', 'How-to'], ['/video/', 'Video SEO'], ['/breadcrumbs/', 'Breadcrumbs'],
 ];
 ---
 <!doctype html>
@@ -31,6 +32,7 @@ const routes = [
     <SEO entry={post} siteUrl={siteUrl} defaultImage={defaultImage} siteName={post.data.siteName} />
   </head>
   <body class="demo-shell blog-layout">
+        <a class="skip-link" href="#main-content">Skip to content</a>
     <aside class="demo-sidebar" aria-label="Site navigation">
       <div>
         <a class="demo-brand" href="/" aria-label="eloymartinezcuesta.com home">
@@ -49,7 +51,7 @@ const routes = [
     </aside>
     <div class="demo-main">
       <div class="demo-topbar"><a href="/">Back to the demo index ↗</a></div>
-      <main class="demo-content">
+      <main id="main-content" class="demo-content">
         <article class="blog-article">
           <header class="blog-article-header">
             <p class="demo-eyebrow">Blog posting · {post.data.tags?.[0] ?? 'Editorial'}</p>

@@ -50,6 +50,7 @@ const routes = [
     />
   </head>
   <body class="demo-shell">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <aside class="demo-sidebar" aria-label="Site navigation">
       <div>
             <a class="demo-brand" href="/" aria-label="astro-seo-complement Demo home">
@@ -68,7 +69,7 @@ const routes = [
     </aside>
     <div class="demo-main">
       <div class="demo-topbar"><a href="https://github.com/EloyEMC/astro-seo-complement">Open-source SEO primitives ↗</a></div>
-      <main class="demo-content">
+      <main id="main-content" class="demo-content">
         <header class="demo-hero">
           {eyebrow && <p class="demo-eyebrow">{eyebrow}</p>}
           <h1>{uppercaseTitle ? title.toUpperCase() : title}</h1>

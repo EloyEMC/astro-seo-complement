@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const defaultImage = siteConfig.site + '/og-default.png';
+const defaultImage = siteConfig.site + '/og-default.svg';
 ---
 <BlogPost post={post} siteUrl={siteConfig.site} defaultImage={defaultImage}>
   <Content />

@@ -2,6 +2,16 @@ import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
+const urlString = () =>
+	z.string().refine((value) => {
+		try {
+			new URL(value);
+			return true;
+		} catch {
+			return false;
+		}
+	}, "Expected a valid URL");
+
 const blog = defineCollection({
 	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
 	schema: z.object({
@@ -19,7 +29,7 @@ const blog = defineCollection({
 		twitterSite: z.string().optional(),
 		canonicalUrl: z.string().optional(),
 		author: z.string().optional(),
-		authorUrl: z.string().url().optional(),
+		authorUrl: urlString().optional(),
 		authorImage: z.string().optional(),
 		ogType: z.enum(["website", "article"]).default("article"),
 		locale: z.string().optional(),
@@ -38,7 +48,7 @@ const product = defineCollection({
 		sku: z.string().optional(),
 		price: z.number().nonnegative().optional(),
 		priceCurrency: z.string().length(3).optional(),
-		availability: z.string().url().optional(),
+		availability: urlString().optional(),
 		draft: z.boolean().default(false),
 	}),
 });

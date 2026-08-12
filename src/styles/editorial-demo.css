@@ -32,6 +32,24 @@ a:focus-visible {
 	color: var(--demo-paper);
 }
 
+.skip-link {
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	z-index: 10;
+	transform: translateY(-200%);
+	padding: 0.65rem 0.9rem;
+	color: var(--demo-ink);
+	background: var(--demo-gold);
+	font:
+		0.75rem / 1 Arial,
+		sans-serif;
+	text-decoration: none;
+}
+.skip-link:focus {
+	transform: translateY(0);
+}
+
 .demo-shell {
 	min-height: 100vh;
 }
@@ -209,13 +227,18 @@ figure {
 	max-width: 100%;
 	margin: 2rem 0;
 }
-figure img {
+figure img,
+video {
 	display: block;
 	width: min(100%, 60rem);
+	max-width: 100%;
 	height: auto;
 	max-height: 70vh;
 	margin: 0 auto;
 	object-fit: contain;
+}
+video {
+	aspect-ratio: 16 / 9;
 }
 figcaption {
 	max-width: 60rem;
