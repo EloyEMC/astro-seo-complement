@@ -6,9 +6,9 @@ export interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-	site: "https://eloymartinezcuesta.com",
-	title: "eloymartinezcuesta.com",
+	site: "https://astro-seo-complement.pages.dev",
+	title: "astro-seo-complement Demo",
 	description:
-		"The eloymartinezcuesta.com template, powered by astro-seo-complement for inspectable metadata and JSON-LD.",
+		"A public demo of metadata and JSON-LD generated with astro-seo-complement.",
 	locale: "en_US",
 };

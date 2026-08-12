@@ -10,7 +10,7 @@ canonicalUrl: "/blog/hello-world/"
 author: "astro-seo-complement maintainers"
 authorUrl: "https://github.com/Gentleman-Programming/astro-seo-complement"
 ogType: "article"
-siteName: "eloymartinezcuesta.com"
+siteName: "astro-seo-complement Demo"
 noindex: false
 nofollow: false
 keywords:
