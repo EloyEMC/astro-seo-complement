@@ -7,8 +7,9 @@ image_alt: "Editorial content preview for the Astro SEO demo"
 tags: ["content", "editorial", "web standards"]
 twitter_img: "/og-default.svg"
 canonicalUrl: "/blog/inspectable-content/"
-author: "astro-seo-complement maintainers"
-authorUrl: "https://github.com/Gentleman-Programming/astro-seo-complement"
+author: "Eloy Martínez Cuesta"
+authorUrl: "https://eloymartinezcuesta.com"
+authorImage: "/eloy-martinez.webp"
 ogType: "article"
 siteName: "astro-seo-complement Demo"
 keywords:

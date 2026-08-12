@@ -8,8 +8,9 @@ image_alt: "The astro-seo-complement demo homepage"
 tags: ["welcome", "astro", "seo"]
 twitter_img: "/og-default.svg"
 canonicalUrl: "/blog/hello-world/"
-author: "astro-seo-complement maintainers"
-authorUrl: "https://github.com/Gentleman-Programming/astro-seo-complement"
+author: "Eloy Martínez Cuesta"
+authorUrl: "https://eloymartinezcuesta.com"
+authorImage: "/eloy-martinez.webp"
 ogType: "article"
 siteName: "astro-seo-complement Demo"
 noindex: false

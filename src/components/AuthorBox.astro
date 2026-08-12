@@ -1,4 +1,6 @@
 ---
+import { authorProfile } from '../author-profile';
+
 interface Props {
   author: string;
   authorUrl?: string;
@@ -6,15 +8,22 @@ interface Props {
   date: Date;
 }
 
-const { author, authorUrl, authorImage = '/author-emc.svg', date } = Astro.props;
-const bio = 'The demo maintainer documents inspectable Astro SEO patterns and keeps examples aligned with their visible content.';
+const { author, authorUrl, authorImage = authorProfile.image, date } = Astro.props;
+const bio = authorProfile.bio;
 ---
-<aside class="author-box" aria-label="About the author">
-  <img class="author-box-avatar" src={authorImage} alt={`Portrait of ${author}`} width="80" height="80" />
-  <div>
-    <p class="demo-eyebrow">Written by</p>
-    <h2>{authorUrl ? <a href={authorUrl}>{author}</a> : author}</h2>
-    <p>{bio}</p>
-    <p class="author-box-date"><time datetime={date.toISOString()}>{date.toISOString().slice(0, 10)}</time></p>
+<aside class="author-box" aria-labelledby="author-box-title">
+  <div class="author-box-identity">
+    <img class="author-box-avatar" src={authorImage} alt={`Retrato de ${author}`} width="96" height="96" />
+    <div>
+      <p class="demo-eyebrow">About the author</p>
+      <h2 id="author-box-title">{authorUrl ? <a href={authorUrl}>{author}</a> : author}</h2>
+      <p class="author-box-bio">{bio}</p>
+    </div>
+  </div>
+  <div class="author-box-details">
+    <ul class="author-box-topics" aria-label="Topics">
+      {authorProfile.topics.map((topic) => <li>{topic}</li>)}
+    </ul>
+    <p class="author-box-date"><span>Published</span> <time datetime={date.toISOString()}>{date.toISOString().slice(0, 10)}</time></p>
   </div>
 </aside>

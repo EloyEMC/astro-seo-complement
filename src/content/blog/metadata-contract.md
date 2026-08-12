@@ -8,8 +8,9 @@ image_alt: "A diagram-like preview of an inspectable Astro page"
 tags: ["metadata", "architecture", "astro"]
 twitter_img: "/og-default.svg"
 canonicalUrl: "/blog/metadata-contract/"
-author: "astro-seo-complement maintainers"
-authorUrl: "https://github.com/Gentleman-Programming/astro-seo-complement"
+author: "Eloy Martínez Cuesta"
+authorUrl: "https://eloymartinezcuesta.com"
+authorImage: "/eloy-martinez.webp"
 ogType: "article"
 siteName: "astro-seo-complement Demo"
 keywords:
