@@ -83,6 +83,22 @@ export interface ReviewInput extends BaseInput {
 	reviewBody?: string;
 	datePublished?: Date | string;
 }
+export interface ImageObjectInput extends BaseInput {
+	name: string;
+	contentUrl: string | URL;
+	caption?: string;
+	width?: number;
+	height?: number;
+}
+export interface VideoObjectInput extends BaseInput {
+	name: string;
+	description: string;
+	thumbnailUrl: ImageValue;
+	uploadDate: Date | string;
+	contentUrl?: string | URL;
+	embedUrl?: string | URL;
+	duration?: string;
+}
 export interface AggregateRatingInput {
 	ratingValue: number | string;
 	ratingCount?: number;
@@ -283,6 +299,32 @@ export function buildAggregateOffer(input: AggregateOfferInput): SchemaNode {
 		offers: input.offers?.map((offer) =>
 			buildOffer({ ...offer, siteUrl: input.siteUrl ?? offer.siteUrl }),
 		),
+	});
+}
+export function buildImageObject(input: ImageObjectInput): SchemaNode {
+	return clean({
+		"@context": context,
+		"@type": "ImageObject",
+		"@id": id("ImageObject", input, "image"),
+		name: input.name,
+		contentUrl: url(input.contentUrl, input.siteUrl),
+		caption: input.caption,
+		width: input.width,
+		height: input.height,
+	});
+}
+export function buildVideoObject(input: VideoObjectInput): SchemaNode {
+	return clean({
+		"@context": context,
+		"@type": "VideoObject",
+		"@id": id("VideoObject", input, "video"),
+		name: input.name,
+		description: input.description,
+		thumbnailUrl: image(input.thumbnailUrl, input.siteUrl),
+		uploadDate: date(input.uploadDate),
+		contentUrl: url(input.contentUrl, input.siteUrl),
+		embedUrl: url(input.embedUrl, input.siteUrl),
+		duration: input.duration,
 	});
 }
 export function buildAggregateRating(input: AggregateRatingInput): SchemaNode {

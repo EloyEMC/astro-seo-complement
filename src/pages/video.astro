@@ -1,0 +1,25 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { siteConfig } from '../config';
+import { buildBreadcrumbList, buildVideoObject, composeGraph } from '../schemas';
+
+const video = buildVideoObject({
+  name: 'Video SEO showcase placeholder',
+  description: 'A visible HTML5 video integration example whose media file is intentionally unavailable in this demo.',
+  thumbnailUrl: '/video-poster.svg',
+  uploadDate: '2025-01-01',
+  siteUrl: siteConfig.site,
+});
+const schema = composeGraph(video, buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Video SEO', item: '/video/' }], siteConfig.site));
+---
+<DemoLayout title="Video SEO without invented media" description="A factual VideoObject example with a local poster and an explicitly unavailable video source." canonicalUrl="/video/" schema={schema} eyebrow="VideoObject · documented placeholder">
+  <section class="panel">
+    <p><span class="tag">Media status · unavailable</span></p>
+    <h2>Poster and markup, no fabricated video URL</h2>
+    <p>The repository has no licensed sample video asset, so this page does not claim a content or embed URL. It demonstrates the visible HTML structure, poster metadata, and the factual fields available now.</p>
+    <video controls poster="/video-poster.svg" width="1280" height="720" preload="metadata" aria-label="Video SEO showcase placeholder">
+      <p>Video media is unavailable in this demo. The poster remains available as a local SVG.</p>
+    </video>
+    <p><strong>Unavailable media:</strong> no playable source is provided. The <code>VideoObject</code> uses only its name, description, poster, and documented upload date.</p>
+  </section>
+</DemoLayout>

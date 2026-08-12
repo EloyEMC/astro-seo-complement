@@ -1,9 +1,10 @@
 ---
 import DemoLayout from '../layouts/DemoLayout.astro';
 import { siteConfig } from '../config';
-import { buildProduct, buildReview, buildAggregateRating, composeGraph } from '../schemas';
+import { buildImageObject, buildProduct, buildReview, buildAggregateRating, composeGraph } from '../schemas';
 const review = { author: { name: 'Mina Patel', url: '/reviews/', siteUrl: siteConfig.site }, reviewRating: { ratingValue: 5, bestRating: 5 }, reviewBody: 'Clear examples make the relationship between page copy and JSON-LD easy to verify.', datePublished: '2025-01-18' };
-const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description: 'An inspectable guide to metadata and structured data.', url: '/product/', siteUrl: siteConfig.site, aggregateRating: { ratingValue: 4.8, reviewCount: 24, bestRating: 5 }, review }), buildAggregateRating({ ratingValue: 4.8, reviewCount: 24, bestRating: 5 }), buildReview({ ...review, siteUrl: siteConfig.site }));
+const reviewImage = buildImageObject({ name: 'Review example card', contentUrl: '/field-guide.svg', caption: 'Illustrative product image accompanying the fictional review', width: 1200, height: 800, siteUrl: siteConfig.site });
+    const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description: 'An inspectable guide to metadata and structured data.', url: '/product/', siteUrl: siteConfig.site, image: '/field-guide.svg', aggregateRating: { ratingValue: 4.8, reviewCount: 24, bestRating: 5 }, review }), reviewImage, buildAggregateRating({ ratingValue: 4.8, reviewCount: 24, bestRating: 5 }), buildReview({ ...review, siteUrl: siteConfig.site }));
 ---
 <DemoLayout title="Reviews that explain the value" description="A clearly labeled demo Product review example combining an AggregateRating with a detailed Review." canonicalUrl="/reviews/" schema={schema} eyebrow="Review schema · illustrative demo data">
   <section class="panel">
@@ -11,6 +12,7 @@ const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description:
     <h2>One summary, one example review</h2>
     <blockquote>“Clear examples make the relationship between page copy and JSON-LD easy to verify.”</blockquote>
     <p><strong>Mina Patel · January 18, 2025</strong></p>
+    <figure><img src="/field-guide.svg" alt="Illustrative cover of the fictional SEO Field Guide reviewed here" width="1200" height="800" loading="lazy" /><figcaption>Image attached to this illustrative review example; it is not customer evidence.</figcaption></figure>
     <p>This quote, author, date, and rating are fictional values included only to demonstrate the schema shape. They are not a claim about a real customer or product.</p>
   </section>
   <h2>Two levels of social proof</h2>

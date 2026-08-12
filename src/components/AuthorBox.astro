@@ -1,0 +1,20 @@
+---
+interface Props {
+  author: string;
+  authorUrl?: string;
+  authorImage?: string;
+  date: Date;
+}
+
+const { author, authorUrl, authorImage = '/author-emc.svg', date } = Astro.props;
+const bio = 'The demo maintainer documents inspectable Astro SEO patterns and keeps examples aligned with their visible content.';
+---
+<aside class="author-box" aria-label="About the author">
+  <img class="author-box-avatar" src={authorImage} alt={`Portrait of ${author}`} width="80" height="80" />
+  <div>
+    <p class="demo-eyebrow">Written by</p>
+    <h2>{authorUrl ? <a href={authorUrl}>{author}</a> : author}</h2>
+    <p>{bio}</p>
+    <p class="author-box-date"><time datetime={date.toISOString()}>{date.toISOString().slice(0, 10)}</time></p>
+  </div>
+</aside>

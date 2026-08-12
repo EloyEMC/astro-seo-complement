@@ -79,9 +79,31 @@ El componente serializa de forma segura el JSON-LD proporcionado, pero la valida
 
 ## Builders y escape hatch
 
-Se exportan `buildPerson`, `buildOrganization`, `buildWebSite`, `buildProfilePage`, `buildWebPage`, `buildBreadcrumbList`, `buildArticle`, `buildBlogPosting`, `buildNewsArticle`, `buildOffer`, `buildAggregateOffer`, `buildAggregateRating`, `buildReview`, `buildProduct`, `buildFAQPage`, `buildHowTo` y `composeGraph`. Usá `SchemaNode` y `composeGraph` como escape hatch para tipos adicionales de Schema.org. Los builders no inventan valoraciones, reseñas, precios ni URL.
+Se exportan `buildPerson`, `buildOrganization`, `buildWebSite`, `buildProfilePage`, `buildWebPage`, `buildBreadcrumbList`, `buildArticle`, `buildBlogPosting`, `buildNewsArticle`, `buildOffer`, `buildAggregateOffer`, `buildAggregateRating`, `buildReview`, `buildProduct`, `buildImageObject`, `buildVideoObject`, `buildFAQPage`, `buildHowTo` y `composeGraph`. Usá `SchemaNode` y `composeGraph` como escape hatch para tipos adicionales de Schema.org. Los builders no inventan valoraciones, reseñas, precios ni URL.
 
-## Integración de Astro y sitemap
+    ## Ejemplos de imagen, vídeo y autor
+
+    El SEO de imágenes es explícito: renderizá una imagen con `alt`, `width`, `height` y un pie significativo, y usá la misma URL resoluble en `buildImageObject` y en el schema de la página. El demo lo muestra en [`/product/`](https://astro-seo-complement.pages.dev/product/) y [`/reviews/`](https://astro-seo-complement.pages.dev/reviews/).
+
+    ```ts
+    import { buildImageObject, buildVideoObject } from 'astro-seo-complement';
+
+    const image = buildImageObject({
+      name: 'Portada del producto', contentUrl: '/product-cover.svg',
+      caption: 'Pie de imagen factual', width: 1200, height: 800, siteUrl,
+    });
+    const video = buildVideoObject({
+      name: 'Recorrido', description: 'Descripción factual',
+      thumbnailUrl: '/video-poster.svg', uploadDate: '2025-01-01', siteUrl,
+      // Agregá contentUrl o embedUrl solo cuando la URL exista realmente.
+    });
+    ```
+
+    Las entradas del blog con `author`, `authorUrl` y `authorImage` muestran un cuadro de autor accesible y reutilizable con fecha y una breve biografía del mantenedor. Consultá [`/blog/`](https://astro-seo-complement.pages.dev/blog/).
+
+    El tutorial completo [`/how-to/`](https://astro-seo-complement.pages.dev/how-to/) cubre instalación, `SEO.astro`, builders, `composeGraph`, alineación del contenido y validación. La ruta [`/video/`](https://astro-seo-complement.pages.dev/video/) documenta un estado sin medios disponibles sin inventar una URL de vídeo.
+
+    ## Integración de Astro y sitemap
 
 Mantené el sitio canónico en `astro.config.mjs` y agregá la integración opcional por separado:
 

@@ -1,5 +1,6 @@
 ---
 import SEO from '../components/SEO.astro';
+import AuthorBox from '../components/AuthorBox.astro';
 import type { CollectionEntry } from 'astro:content';
 import '../styles/editorial-demo.css';
 
@@ -12,7 +13,7 @@ interface Props {
 const { post, siteUrl, defaultImage } = Astro.props;
 const routes = [
   ['/about/', 'About'], ['/editorial/', 'Editorial'],
-  ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'], ['/how-to/', 'How-to'], ['/breadcrumbs/', 'Breadcrumbs'],
+  ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'], ['/how-to/', 'How-to'], ['/video/', 'Video SEO'], ['/breadcrumbs/', 'Breadcrumbs'],
 ];
 ---
 <!doctype html>
@@ -52,6 +53,7 @@ const routes = [
             <p class="blog-article-meta">{post.data.author} · {post.data.date.toISOString().slice(0, 10)}</p>
           </header>
           <div class="blog-prose"><slot /></div>
+          {post.data.author && <AuthorBox author={post.data.author} authorUrl={post.data.authorUrl} authorImage={post.data.authorImage} date={post.data.date} />}
         </article>
       </main>
       <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · Visible content powered by <code>astro-seo-complement</code> and aligned with BlogPosting JSON-LD. <a href="/about/">About the project</a> · <a href="https://github.com/EloyEMC/astro-seo-complement">Source on GitHub</a></footer>

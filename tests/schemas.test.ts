@@ -7,6 +7,8 @@ import {
 	buildBreadcrumbList,
 	buildFAQPage,
 	buildHowTo,
+	buildImageObject,
+	buildVideoObject,
 	buildNewsArticle,
 	buildOffer,
 	buildOrganization,
@@ -20,6 +22,42 @@ import {
 } from "../src/schemas";
 
 describe("JSON-LD builders", () => {
+	it("builds an ImageObject with resolved URLs and factual dimensions", () => {
+		const image = buildImageObject({
+			name: "Field guide cover",
+			contentUrl: "/assets/field-guide.svg",
+			caption: "Illustrative SEO Field Guide cover",
+			width: 1200,
+			height: 800,
+			siteUrl: "https://example.com",
+		});
+
+		expect(image).toMatchObject({
+			"@type": "ImageObject",
+			name: "Field guide cover",
+			contentUrl: "https://example.com/assets/field-guide.svg",
+			caption: "Illustrative SEO Field Guide cover",
+			width: 1200,
+			height: 800,
+		});
+	});
+
+	it("builds a VideoObject without inventing unavailable media URLs", () => {
+		const video = buildVideoObject({
+			name: "SEO graph walkthrough",
+			description: "A documented video placeholder for the demo.",
+			thumbnailUrl: "/assets/video-poster.svg",
+			uploadDate: "2025-01-01",
+			siteUrl: "https://example.com",
+		});
+
+		expect(video).toMatchObject({
+			"@type": "VideoObject",
+			thumbnailUrl: ["https://example.com/assets/video-poster.svg"],
+			uploadDate: "2025-01-01T00:00:00.000Z",
+		});
+		expect(video).not.toHaveProperty("contentUrl");
+	});
 	it("builds an article with absolute stable identifiers and no undefined values", () => {
 		const article = buildArticle({
 			headline: "A useful article",

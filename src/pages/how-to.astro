@@ -2,16 +2,22 @@
 import DemoLayout from '../layouts/DemoLayout.astro';
 import { siteConfig } from '../config';
 import { buildHowTo, composeGraph } from '../schemas';
+
 const steps = [
-  { name: 'Write the page first', text: 'Create useful semantic content with a clear title, summary, headings, and links.' },
-  { name: 'Add explicit metadata', text: 'Pass the page title, description, canonical path, and social metadata to SEO.astro.' },
-  { name: 'Compose related nodes', text: 'Use a schema builder for the page type, then combine related nodes with composeGraph.' },
-  { name: 'Inspect the result', text: 'View source and compare the JSON-LD graph with the visible page before publishing.' },
+  { name: 'Install the package', text: 'Run pnpm add astro-seo-complement in the Astro project that owns the page.' },
+  { name: 'Add SEO.astro', text: 'Import SEO from astro-seo-complement/SEO.astro and pass siteUrl, title, description, and canonicalUrl.' },
+  { name: 'Build and compose schema', text: 'Import a typed builder such as buildProduct or buildWebPage, then pass composeGraph(...) to SEO through its schema prop.' },
+  { name: 'Align visible content', text: 'Use the same factual title, description, dates, image URLs, captions, and author details in the page and its structured data.' },
+  { name: 'Validate the output', text: 'Run pnpm test, pnpm check, and pnpm build; then inspect the built route source and JSON-LD for matching facts.' },
 ];
-const schema = composeGraph(buildHowTo({ name: 'Build an inspectable Astro SEO page', totalTime: 'PT20M', siteUrl: siteConfig.site, steps }));
+const schema = composeGraph(buildHowTo({ name: 'Integrate astro-seo-complement in an Astro page', totalTime: 'PT25M', siteUrl: siteConfig.site, steps }));
 ---
-<DemoLayout title="Build an inspectable Astro SEO page" description="A four-step HowTo guide showing names, instructions, position, and a twenty-minute total time." canonicalUrl="/how-to/" schema={schema} eyebrow="How-to schema">
-  <section class="panel"><p>Use this short workflow whenever a new route needs metadata and structured data. The four steps are deliberately ordered so markup describes content that already exists.</p><p><strong>Estimated time: 20 minutes</strong></p></section>
-  <ol class="steps">{steps.map(({ name, text }) => <li><div><h2>{name}</h2><p>{text}</p></div></li>)}</ol>
-  <section class="panel"><h2>Why this sequence works</h2><p>Writing, annotating, composing, and inspecting in that order keeps the markup honest. It also gives a reviewer a simple way to compare the page, metadata, and graph before a route ships.</p></section>
+<DemoLayout title="Integrate astro-seo-complement" description="A complete, inspectable path from package installation to validated Astro metadata and JSON-LD." canonicalUrl="/how-to/" schema={schema} eyebrow="How-to schema · integration tutorial">
+  <section class="panel"><p>This tutorial describes the integration work you perform in your Astro project. The package provides typed metadata, builders, and safe serialization; it does not rewrite content, run external validators, or guarantee rankings.</p><p><strong>Estimated time: 25 minutes</strong></p></section>
+  <ol class="steps">{steps.map(({ name, text }, index) => <li><div><h2>{index + 1}. {name}</h2><p>{text}</p></div></li>)}</ol>
+  <section class="panel">
+    <h2>Try the aligned demos</h2>
+    <p>Compare the visible content with generated JSON-LD on the <a href="/product/">Product</a>, <a href="/reviews/">Reviews</a>, <a href="/video/">Video SEO</a>, and <a href="/blog/">Blog</a> routes.</p>
+    <p>For external validation, make your built page available at a testable URL and use the <a href="https://validator.schema.org/">Schema Markup Validator</a> or <a href="https://search.google.com/test/rich-results">Rich Results Test</a>. Those services are not automated by this package.</p>
+  </section>
 </DemoLayout>
