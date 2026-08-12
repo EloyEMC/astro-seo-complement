@@ -1,0 +1,32 @@
+---
+import SEO from '../components/SEO.astro';
+import { siteConfig } from '../config';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <SEO
+      siteUrl={siteConfig.site}
+      siteName="astro-seo-complement"
+      title="astro-seo-complement Demo"
+      description="A public demo of astro-seo-complement, a reusable SEO component for Astro sites."
+      canonicalUrl="/"
+      keywords={["Astro", "SEO", "astro-seo-complement"]}
+      ogType="website"
+      noindex={false}
+      nofollow={false}
+    />
+  </head>
+  <body>
+    <main>
+      <h1>astro-seo-complement Demo</h1>
+      <p>
+        This site demonstrates <strong>astro-seo-complement</strong>, a reusable SEO component for
+        Astro sites.
+      </p>
+      <p><a href="/blog/hello-world/">Read the Hello World blog post</a></p>
+    </main>
+  </body>
+</html>
