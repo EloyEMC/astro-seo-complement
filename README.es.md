@@ -133,7 +133,9 @@ CI ejecuta los tests, la comprobación de tipos, el build del paquete, el build 
 
 ## Límites de validación
 
-Los tests estructurales locales verifican la forma del schema generado, los campos obligatorios, la serialización y el comportamiento de los builders compatibles. No reproducen las reglas externas de aptitud de Google ni garantizan posicionamiento, rastreo, indexación o resultados enriquecidos.
+Los tests estructurales locales verifican la forma del schema generado, los campos obligatorios, la serialización y el comportamiento de los builders compatibles. Un grafo puede ser válido según Schema.org sin ser apto para un resultado enriquecido de Google: Google aplica políticas específicas, reglas de calidad y requisitos de experiencia de primera mano.
+
+La ruta de demo `/reviews/` usa intencionalmente nombres, puntuaciones y texto de reseña ficticios para demostrar la estructura de `Review` y `AggregateRating`. No uses datos de reseñas ficticios como evidencia para resultados enriquecidos de reseñas en Google; publicá marcado de reseñas sólo cuando represente experiencia genuina de primera mano y cumpla las políticas actuales de Google.
 
 Para una validación externa manual, publicá una página consumidora en una URL comprobable y enviala a [Google's Rich Results Test](https://search.google.com/test/rich-results) y a [Schema Markup Validator](https://validator.schema.org/). Corregí los datos estructurados generados en el proyecto consumidor; el paquete no automatiza esas comprobaciones externas.
 

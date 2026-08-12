@@ -1,6 +1,6 @@
 {
   "name": "astro-seo-complement",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Typed SEO metadata, Schema.org builders, and safe JSON-LD tools for Astro.",
   "type": "module",
   "packageManager": "pnpm@10.12.1",

@@ -117,6 +117,35 @@ describe("JSON-LD builders", () => {
 		});
 	});
 
+	it("preserves explicit offer IDs across product and aggregate offer nodes", () => {
+		const offers = [
+			{ id: "/product/#offer-starter", price: 9, priceCurrency: "USD" },
+			{ id: "/product/#offer-pro", price: 19, priceCurrency: "USD" },
+		];
+		const product = buildProduct({
+			name: "Field guide",
+			siteUrl: "https://example.com",
+			offers,
+		});
+		const aggregate = buildAggregateOffer({
+			lowPrice: 9,
+			highPrice: 19,
+			offerCount: 2,
+			priceCurrency: "USD",
+			siteUrl: "https://example.com",
+			offers,
+		});
+
+		expect(product.offers).toMatchObject([
+			{ "@id": "https://example.com/product/#offer-starter" },
+			{ "@id": "https://example.com/product/#offer-pro" },
+		]);
+		expect(aggregate.offers).toMatchObject([
+			{ "@id": "https://example.com/product/#offer-starter" },
+			{ "@id": "https://example.com/product/#offer-pro" },
+		]);
+	});
+
 	it("resolves nested author, seller, and review URLs from the parent site URL", () => {
 		const product = buildProduct({
 			name: "Widget",

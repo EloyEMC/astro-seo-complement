@@ -133,7 +133,9 @@ CI runs the package tests, type-check, package build, example Astro build, audit
 
 ## Validation limits
 
-Local structural tests verify generated schema shape, required fields, serialization, and supported builder behavior. They do not reproduce Google's external eligibility rules or guarantee ranking, crawling, indexing, or rich-result display.
+Local structural tests verify generated schema shape, required fields, serialization, and supported builder behavior. A graph can be valid Schema.org data without being eligible for a Google rich result: Google applies separate feature-specific policies, content-quality rules, and first-hand experience requirements.
+
+The demo `/reviews/` route intentionally uses fictional names, ratings, and review text to demonstrate `Review` and `AggregateRating` structure. Do not use fictional review data as evidence for Google review rich results; publish review markup only when it represents genuine first-hand experience and meets Google's current policies.
 
 For manual external validation, make a consumer page available at a testable URL and submit it to [Google's Rich Results Test](https://search.google.com/test/rich-results) and [Schema Markup Validator](https://validator.schema.org/). Correct the generated structured data in the consumer project; these external checks are not automated by this package.
 

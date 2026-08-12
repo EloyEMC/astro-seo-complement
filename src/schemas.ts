@@ -128,7 +128,9 @@ const url = (value: string | URL | undefined, siteUrl?: string | URL) =>
 			? absoluteUrl(value, siteUrl.toString())
 			: value.toString();
 const id = (type: string, input: BaseInput, suffix = type.toLowerCase()) => {
-	const resolved = url(input.id ?? input.url, input.siteUrl);
+	const explicit = url(input.id, input.siteUrl);
+	if (explicit) return explicit;
+	const resolved = url(input.url, input.siteUrl);
 	return resolved ? `${resolved}#${suffix}` : undefined;
 };
 const image = (value?: ImageValue, siteUrl?: string | URL) =>
