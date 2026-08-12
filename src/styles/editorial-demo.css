@@ -391,7 +391,9 @@ pre {
 	border-radius: 999px;
 	padding: 0.35rem 0.65rem;
 	color: var(--demo-gold);
-	font: 0.65rem / 1 Arial, sans-serif;
+	font:
+		0.65rem / 1 Arial,
+		sans-serif;
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 }
@@ -399,7 +401,9 @@ pre {
 	flex: 0 0 auto;
 	margin: 0;
 	color: var(--demo-muted);
-	font: 0.68rem / 1.4 Arial, sans-serif;
+	font:
+		0.68rem / 1.4 Arial,
+		sans-serif;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 }
@@ -484,7 +488,7 @@ pre {
 	.blog-article-title {
 		font-size: clamp(2.6rem, 14vw, 4.5rem);
 	}
-		.grid {
+	.grid {
 		grid-template-columns: 1fr;
 	}
 	.author-box-identity {

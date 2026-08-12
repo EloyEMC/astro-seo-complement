@@ -10,7 +10,7 @@ twitter_img: "/og-default.svg"
 canonicalUrl: "/blog/hello-world/"
 author: "Eloy Martínez Cuesta"
 authorUrl: "https://eloymartinezcuesta.com"
-authorImage: "/eloy-martinez.webp"
+authorImage: "https://eloymartinezcuesta.com/eloy-author.webp"
 ogType: "article"
 siteName: "astro-seo-complement Demo"
 noindex: false
