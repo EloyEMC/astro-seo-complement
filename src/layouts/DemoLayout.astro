@@ -2,6 +2,7 @@
 import SEO from '../components/SEO.astro';
 import SchemaInspector from '../components/SchemaInspector.astro';
 import { siteConfig } from '../config';
+import { authorProfile } from '../author-profile';
 import type { SchemaGraph } from '../schemas';
 import '../styles/editorial-demo.css';
 
@@ -65,10 +66,10 @@ const routes = [
           </ul>
         </nav>
       </div>
-      <p class="demo-sidebar-footer">Semantic content.<br />Explicit metadata.<br />One composed graph.</p>
+      <p class="demo-sidebar-footer">Semantic content.<br />Explicit metadata.<br />One composed graph.<br /><a href={authorProfile.url}>Maintained by {authorProfile.name}</a></p>
     </aside>
     <div class="demo-main">
-      <div class="demo-topbar"><a href="https://github.com/EloyEMC/astro-seo-complement">Open-source SEO primitives ↗</a></div>
+      <div class="demo-topbar"><a href="https://github.com/EloyEMC/astro-seo-complement">Open-source SEO primitives ↗</a> · <a href={authorProfile.url}>Maintainer site</a></div>
       <main id="main-content" class="demo-content">
         <header class="demo-hero">
           {eyebrow && <p class="demo-eyebrow">{eyebrow}</p>}
@@ -78,7 +79,7 @@ const routes = [
         <slot />
         {schema && <SchemaInspector schema={schema} />}
       </main>
-      <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · A template powered by <code>astro-seo-complement</code> for comparing visible content, metadata, canonical URLs, and JSON-LD graphs. <a href="/about/">About the project</a> · <a href="https://github.com/EloyEMC/astro-seo-complement">Source on GitHub</a></footer>
+      <footer class="demo-footer"><strong>astro-seo-complement Demo</strong> · A template powered by <code>astro-seo-complement</code> for comparing visible content, metadata, canonical URLs, and JSON-LD graphs. <a href="/about/">About the project</a> · <a href="https://github.com/EloyEMC/astro-seo-complement">Source on GitHub</a> · <a href={authorProfile.url}>Maintainer site</a></footer>
     </div>
   </body>
 </html>

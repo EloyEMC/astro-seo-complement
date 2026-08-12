@@ -10,13 +10,14 @@ interface Props {
 
 const { author, authorUrl, authorImage = authorProfile.image, date } = Astro.props;
 const bio = authorProfile.bio;
+const resolvedAuthorUrl = authorUrl ?? (author === authorProfile.name ? authorProfile.url : undefined);
 ---
 <aside class="author-box" aria-labelledby="author-box-title">
   <div class="author-box-identity">
     <img class="author-box-avatar" src={authorImage} alt={`Retrato del autor: ${author}`} width="96" height="96" />
     <div>
       <p class="demo-eyebrow">About the author</p>
-      <h2 id="author-box-title">{authorUrl ? <a href={authorUrl}>{author}</a> : author}</h2>
+      <h2 id="author-box-title">{resolvedAuthorUrl ? <a href={resolvedAuthorUrl}>{author}</a> : author}</h2>
       <p class="author-box-bio">{bio}</p>
     </div>
   </div>
