@@ -1,0 +1,12 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { siteConfig } from '../config';
+import { buildAggregateOffer, buildBreadcrumbList, buildOffer, buildProduct, composeGraph } from '../schemas';
+const seller = { name: 'astro-seo-complement maintainers', url: siteConfig.site };
+const offers = [{ price: 9, priceCurrency: 'USD', url: '/product/', availability: 'https://schema.org/InStock', seller }, { price: 19, priceCurrency: 'USD', url: '/product/', availability: 'https://schema.org/InStock', seller }];
+const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description: 'A practical digital field guide for building inspectable Astro pages.', url: '/product/', siteUrl: siteConfig.site, sku: 'FIELD-GUIDE-001', brand: 'astro-seo-complement', image: '/og-default.svg', offers }), buildOffer({ ...offers[0], siteUrl: siteConfig.site }), buildAggregateOffer({ lowPrice: 9, highPrice: 19, offerCount: 2, priceCurrency: 'USD', siteUrl: siteConfig.site, offers }), buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Product', item: '/product/' }], siteConfig.site));
+---
+<DemoLayout title="SEO Field Guide" description="A Product page showing a single Offer and an AggregateOffer with verified pricing data." canonicalUrl="/product/" schema={schema}>
+  <section class="panel"><p><span class="tag">Digital product · SKU FIELD-GUIDE-001</span></p><p>Learn to make an Astro document useful to both people and crawlers. This product card demonstrates how offers belong to a Product while the page keeps price, currency, and availability visible.</p><p><strong>From $9.00 USD</strong> · In stock</p></section>
+  <h2>Offer structure</h2><div class="grid"><article class="card"><h3>Single Offer</h3><p>The starter edition is represented by an <code>Offer</code> with price, currency, seller, and availability.</p></article><article class="card"><h3>Aggregate Offer</h3><p>The product also exposes a $9–$19 range across two editions using <code>AggregateOffer</code>.</p></article></div>
+</DemoLayout>

@@ -1,0 +1,13 @@
+---
+import { serializeJsonLd } from '../seo';
+import type { SchemaGraph } from '../schemas';
+
+interface Props { schema: SchemaGraph }
+const { schema } = Astro.props;
+const formatted = serializeJsonLd(schema);
+---
+<details class="panel" style="margin-top: 2.5rem">
+  <summary><strong>Inspect generated JSON-LD</strong></summary>
+  <p>This is the same schema graph emitted by <code>SEO.astro</code>; the demo only formats it for readable inspection.</p>
+  <pre><code>{formatted}</code></pre>
+</details>

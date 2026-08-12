@@ -1,0 +1,14 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { siteConfig } from '../config';
+import { buildBreadcrumbList, buildNewsArticle, buildOrganization, buildWebPage, composeGraph } from '../schemas';
+const schema = composeGraph(
+  buildNewsArticle({ headline: 'Why structured data belongs beside the content', description: 'An editorial look at aligning visible content, metadata, and JSON-LD.', url: '/editorial/', siteUrl: siteConfig.site, datePublished: '2025-02-14', dateModified: '2025-02-20', author: { name: 'Editorial desk', url: '/about/', siteUrl: siteConfig.site }, publisher: { name: 'astro-seo-complement maintainers', url: siteConfig.site }, articleSection: 'Web development', keywords: ['structured data', 'Astro', 'SEO'], inLanguage: 'en-US' }),
+  buildWebPage({ url: '/editorial/', siteUrl: siteConfig.site, name: 'Why structured data belongs beside the content', description: 'An editorial article about aligned content and metadata.' }),
+  buildOrganization({ name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site }),
+  buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Editorial', item: '/editorial/' }], siteConfig.site),
+);
+---
+<DemoLayout title="Why structured data belongs beside the content" description="A NewsArticle example with dates, author, publisher, section, and keywords." canonicalUrl="/editorial/" schema={schema} ogType="article" eyebrow="Editorial article">
+  <article class="panel"><p><strong>Editorial desk · February 14, 2025</strong></p><p>Search engines can only interpret what a page communicates consistently. That is why this article's headline, summary, author, publisher, and publication dates appear both in the readable document and in its NewsArticle graph.</p><h2>Make the relationship obvious</h2><p>Metadata is not a substitute for useful writing. It is a concise contract between the page and its consumers: the canonical URL identifies the document, Open Graph describes sharing, and JSON-LD makes relationships explicit.</p><h2>Inspect the alignment</h2><p>Use the JSON-LD panel below, then view source. The <code>NewsArticle</code> node is composed with a WebPage, Organization, and BreadcrumbList.</p></article>
+</DemoLayout>

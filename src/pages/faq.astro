@@ -1,0 +1,14 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { buildFAQPage, composeGraph } from '../schemas';
+const questions = [
+  { question: 'Does SEO.astro create the JSON-LD script?', answer: 'Yes. Pass a schema node or composed graph to SEO.astro and it serializes the graph safely for the document head.' },
+  { question: 'Can I use the component without content collections?', answer: 'Yes. The explicit metadata props work for any Astro page; content collections are optional.' },
+  { question: 'Where can I inspect the generated graph?', answer: 'Open the JSON-LD inspection panel on each demo page or view the generated page source.' },
+];
+const schema = composeGraph(buildFAQPage(questions));
+---
+<DemoLayout title="Frequently asked questions" description="An FAQPage example where each visible answer matches its structured Question and Answer pair." canonicalUrl="/faq/" schema={schema}>
+  <section class="grid">{questions.map(({ question, answer }) => <article class="card"><h2>{question}</h2><p>{answer}</p></article>)}</section>
+  <p class="panel" style="margin-top: 1rem">The <code>FAQPage</code> builder receives the same question-and-answer data used to render this page, reducing drift between the UI and JSON-LD.</p>
+</DemoLayout>

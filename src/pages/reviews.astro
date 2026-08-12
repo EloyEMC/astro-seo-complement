@@ -1,0 +1,11 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { siteConfig } from '../config';
+import { buildProduct, buildReview, buildAggregateRating, composeGraph } from '../schemas';
+const review = { author: { name: 'Mina Patel', url: '/reviews/', siteUrl: siteConfig.site }, reviewRating: { ratingValue: 5, bestRating: 5 }, reviewBody: 'Clear examples make the relationship between page copy and JSON-LD easy to verify.', datePublished: '2025-01-18' };
+const schema = composeGraph(buildProduct({ name: 'SEO Field Guide', description: 'An inspectable guide to metadata and structured data.', url: '/product/', siteUrl: siteConfig.site, aggregateRating: { ratingValue: 4.8, reviewCount: 24, bestRating: 5 }, review }), buildAggregateRating({ ratingValue: 4.8, reviewCount: 24, bestRating: 5 }), buildReview({ ...review, siteUrl: siteConfig.site }));
+---
+<DemoLayout title="Reviews that explain the value" description="A Product review example combining an AggregateRating with a detailed Review." canonicalUrl="/reviews/" schema={schema}>
+  <section class="panel"><p><span class="tag">4.8 / 5 · 24 reviews</span></p><blockquote>“Clear examples make the relationship between page copy and JSON-LD easy to verify.”</blockquote><p><strong>Mina Patel</strong> · January 18, 2025</p></section>
+  <h2>Two levels of social proof</h2><div class="grid"><article class="card"><h3>AggregateRating</h3><p>The summary communicates a 4.8 average from 24 reviews with a best rating of 5.</p></article><article class="card"><h3>Review</h3><p>The individual review adds an author, body, date, and explicit Rating node.</p></article></div>
+</DemoLayout>

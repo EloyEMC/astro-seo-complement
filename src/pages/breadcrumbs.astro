@@ -1,0 +1,9 @@
+---
+import DemoLayout from '../layouts/DemoLayout.astro';
+import { buildBreadcrumbList, buildWebPage, composeGraph } from '../schemas';
+const schema = composeGraph(buildWebPage({ url: '/breadcrumbs/', siteUrl: 'https://astro-seo-complement.pages.dev', name: 'Breadcrumb navigation example', description: 'A page that exposes its hierarchy as a BreadcrumbList.' }), buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'Guides', item: '/how-to/' }, { name: 'Breadcrumbs', item: '/breadcrumbs/' }], 'https://astro-seo-complement.pages.dev'));
+---
+<DemoLayout title="Breadcrumb navigation" description="A focused BreadcrumbList example for a three-level content hierarchy." canonicalUrl="/breadcrumbs/" schema={schema}>
+  <nav aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/how-to/">Guides</a></li><li aria-current="page">Breadcrumbs</li></ol></nav>
+  <section class="panel"><h2>Make hierarchy explicit</h2><p>The breadcrumb is visible, keyboard-accessible navigation and the schema graph mirrors its exact order. The final item identifies the current page and does not need a link.</p></section>
+</DemoLayout>

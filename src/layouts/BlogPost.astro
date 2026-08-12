@@ -1,6 +1,7 @@
 ---
 import SEO from '../components/SEO.astro';
 import type { CollectionEntry } from 'astro:content';
+import '../styles/editorial-demo.css';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -9,6 +10,10 @@ interface Props {
 }
 
 const { post, siteUrl, defaultImage } = Astro.props;
+const routes = [
+  ['/about/', 'About'], ['/editorial/', 'Editorial'], ['/product/', 'Product'],
+  ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'], ['/how-to/', 'How-to'], ['/breadcrumbs/', 'Breadcrumbs'],
+];
 ---
 <!doctype html>
 <html lang={post.data.locale?.split('_')[0] ?? 'en'}>
@@ -17,7 +22,34 @@ const { post, siteUrl, defaultImage } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <SEO entry={post} siteUrl={siteUrl} defaultImage={defaultImage} siteName={post.data.siteName} />
   </head>
-  <body>
-    <main><slot /></main>
+  <body class="demo-shell blog-layout">
+    <aside class="demo-sidebar" aria-label="Site navigation">
+      <div>
+        <a class="demo-brand" href="/"><span class="demo-brand-mark" aria-hidden="true">∴</span>astro-seo-complement</a>
+        <p class="demo-kicker">Editorial notes</p>
+        <nav class="demo-nav" aria-label="Demo routes">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog/hello-world/">Blog</a></li>
+            {routes.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+      <p class="demo-sidebar-footer">A real content entry<br />with a complete graph.</p>
+    </aside>
+    <div class="demo-main">
+      <div class="demo-topbar"><a href="/">Back to the demo index ↗</a></div>
+      <main class="demo-content">
+        <article class="blog-article">
+          <header class="blog-article-header">
+            <p class="demo-eyebrow">Blog posting · {post.data.tags?.[0] ?? 'Editorial'}</p>
+            <h1 class="blog-article-title">{post.data.title}</h1>
+            <p class="blog-article-meta">{post.data.author} · {post.data.date.toISOString().slice(0, 10)}</p>
+          </header>
+          <div class="blog-prose"><slot /></div>
+        </article>
+      </main>
+      <footer class="demo-footer"><strong>astro-seo-complement</strong> · Visible content aligned with BlogPosting JSON-LD.</footer>
+    </div>
   </body>
 </html>

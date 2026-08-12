@@ -1,0 +1,72 @@
+---
+import SEO from '../components/SEO.astro';
+import SchemaInspector from '../components/SchemaInspector.astro';
+import { siteConfig } from '../config';
+import type { SchemaGraph } from '../schemas';
+import '../styles/editorial-demo.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  schema?: SchemaGraph;
+  ogType?: 'website' | 'article';
+  keywords?: string[];
+  eyebrow?: string;
+}
+
+const { title, description, canonicalUrl, schema, ogType = 'website', keywords, eyebrow } = Astro.props;
+const defaultImage = `${siteConfig.site}/og-default.svg`;
+const routes = [
+  ['/about/', 'About'], ['/blog/hello-world/', 'Blog'], ['/editorial/', 'Editorial'],
+  ['/product/', 'Product'], ['/reviews/', 'Reviews'], ['/faq/', 'FAQ'],
+  ['/how-to/', 'How-to'], ['/breadcrumbs/', 'Breadcrumbs'],
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <SEO
+      siteUrl={siteConfig.site}
+      siteName={siteConfig.title}
+      defaultImage={defaultImage}
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      keywords={keywords}
+      ogType={ogType}
+      schema={schema}
+      locale={siteConfig.locale}
+    />
+  </head>
+  <body class="demo-shell">
+    <aside class="demo-sidebar" aria-label="Site navigation">
+      <div>
+        <a class="demo-brand" href="/"><span class="demo-brand-mark" aria-hidden="true">∴</span>astro-seo-complement</a>
+        <p class="demo-kicker">Inspectable by design</p>
+        <nav class="demo-nav" aria-label="Demo routes">
+          <ul>
+            <li><a href="/">Home</a></li>
+            {routes.map(([href, label]) => <li><a href={href}>{label}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+      <p class="demo-sidebar-footer">Semantic content.<br />Explicit metadata.<br />One composed graph.</p>
+    </aside>
+    <div class="demo-main">
+      <div class="demo-topbar"><a href="https://github.com/Gentleman-Programming/astro-seo-complement">Open-source SEO primitives ↗</a></div>
+      <main class="demo-content">
+        <header class="demo-hero">
+          {eyebrow && <p class="demo-eyebrow">{eyebrow}</p>}
+          <h1>{title}</h1>
+          <p class="demo-lede">{description}</p>
+        </header>
+        <slot />
+        {schema && <SchemaInspector schema={schema} />}
+      </main>
+      <footer class="demo-footer"><strong>astro-seo-complement</strong> · A small companion for comparing visible content, metadata, canonical URLs, and JSON-LD graphs.</footer>
+    </div>
+  </body>
+</html>
