@@ -1,14 +1,80 @@
 ---
 import DemoLayout from '../layouts/DemoLayout.astro';
 import { siteConfig } from '../config';
-import { buildBreadcrumbList, buildOrganization, buildWebPage, composeGraph } from '../schemas';
+import {
+  buildBreadcrumbList,
+  buildOrganization,
+  buildPerson,
+  buildWebPage,
+  composeGraph,
+} from '../schemas';
+
+const maintainerUrl = 'https://eloymartinezcuesta.com';
+const githubUrl = 'https://github.com/EloyEMC/astro-seo-complement';
+const demoUrl = 'https://astro-seo-complement.pages.dev';
+const description = 'Learn how astro-seo-complement brings explicit SEO metadata and composable JSON-LD graphs to Astro projects.';
+const example = `---
+import SEO from 'astro-seo-complement/SEO.astro';
+import { buildWebPage, composeGraph } from 'astro-seo-complement';
+
+const schema = composeGraph(buildWebPage({
+  name: 'About our project',
+  description: 'A clear page description.',
+  url: '/about/',
+  siteUrl: 'https://example.com',
+}));
+---
+<SEO
+  siteUrl="https://example.com"
+  title="About our project"
+  description="A clear page description."
+  canonicalUrl="/about/"
+  schema={schema}
+/>`;
+
 const schema = composeGraph(
-  buildOrganization({ name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site, sameAs: ['https://github.com/Gentleman-Programming/astro-seo-complement'] }),
-  buildWebPage({ url: '/about/', siteUrl: siteConfig.site, name: 'About astro-seo-complement', description: 'Learn how this demo maps content to SEO metadata and schema.' }),
-  buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'About', item: '/about/' }], siteConfig.site),
+  buildPerson({
+    name: 'Eloy Martínez Cuesta',
+    url: maintainerUrl,
+    siteUrl: siteConfig.site,
+    sameAs: [githubUrl],
+  }),
+  buildOrganization({
+    name: 'astro-seo-complement',
+    url: githubUrl,
+    siteUrl: siteConfig.site,
+    sameAs: [githubUrl],
+  }),
+  buildWebPage({ url: '/about/', siteUrl: siteConfig.site, name: 'About the astro-seo-complement demo', description }),
+  buildBreadcrumbList([{ name: 'Home', item: '/' }, { name: 'About the demo', item: '/about/' }], siteConfig.site),
 );
 ---
-<DemoLayout title="About the demo" description="A generic WebPage that introduces the project and its Organization identity." canonicalUrl="/about/" schema={schema}>
-  <section class="panel"><h2>Purpose</h2><p><strong>astro-seo-complement</strong> provides an Astro <code>SEO.astro</code> component plus composable schema builders. This page demonstrates explicit WebPage metadata, an Organization node, and a breadcrumb trail.</p></section>
-  <h2>Identity signals</h2><div class="grid"><article class="card"><h3>One canonical site</h3><p>Every route resolves against <code>{siteConfig.site}</code>, so canonical links and schema URLs stay consistent.</p></article><article class="card"><h3>Composable graphs</h3><p>Related nodes are combined with <code>composeGraph</code> instead of emitting several competing JSON-LD scripts.</p></article></div>
+<DemoLayout title="About the demo" description={description} canonicalUrl="/about/" schema={schema}>
+  <section class="panel" aria-labelledby="purpose-title">
+    <p class="tag">Purpose</p>
+    <h2 id="purpose-title">See SEO as a connected system</h2>
+    <p><strong>astro-seo-complement</strong> is an Astro SEO toolkit with an <code>SEO.astro</code> component and composable schema builders. This demo makes the relationship between visible content, page metadata, canonical URLs, and JSON-LD easy to inspect on real routes.</p>
+    <p>It is created and maintained by <a href={maintainerUrl}>Eloy Martínez Cuesta</a>. Explore the <a href={githubUrl}>source repository on GitHub</a> or visit the <a href={demoUrl}>public demo</a>.</p>
+  </section>
+
+  <section aria-labelledby="use-title">
+    <h2 id="use-title">Use it in an Astro project</h2>
+    <p>Import the component and a builder, compose the schema graph, and pass the same page facts to your metadata and structured-data layer.</p>
+    <pre><code>{example}</code></pre>
+  </section>
+
+  <section aria-labelledby="where-title">
+    <h2 id="where-title">A foundation for many page types</h2>
+    <div class="grid">
+      <article class="card"><h3>Content-rich sites</h3><p>Use it for blogs, editorial sites, and documentation where authorship, hierarchy, and canonical URLs matter.</p></article>
+      <article class="card"><h3>Product experiences</h3><p>Use it for products, landing pages, and portfolios that need consistent metadata across focused page types.</p></article>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="scope-title">
+    <p class="tag">What this demonstrates</p>
+    <h2 id="scope-title">Clear inputs, inspectable output</h2>
+    <p>The demo shows how semantic page content can map to title and description metadata, Open Graph and Twitter tags, canonical links, and one composed JSON-LD graph. It also shows reusable builders for people, organizations, web pages, breadcrumbs, articles, products, FAQs, and how-to content.</p>
+    <p>Good metadata is useful infrastructure, not a promise of performance. <strong>astro-seo-complement does not guarantee search rankings, indexing, or rich-result eligibility.</strong> Search engines make those decisions using many signals beyond this package.</p>
+  </section>
 </DemoLayout>
