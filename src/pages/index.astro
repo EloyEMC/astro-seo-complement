@@ -7,7 +7,7 @@ const organization = buildOrganization({ name: 'astro-seo-complement maintainers
 const schema = composeGraph(
   buildWebSite({ name: siteConfig.title, url: siteConfig.site, siteUrl: siteConfig.site, description: siteConfig.description, publisher: { name: 'astro-seo-complement maintainers', url: siteConfig.site } }),
   organization,
-  buildProfilePage({ url: '/', siteUrl: siteConfig.site, name: 'astro-seo-complement Demo', mainEntity: { name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site, type: 'Person' } }),
+  buildProfilePage({ url: '/', siteUrl: siteConfig.site, name: siteConfig.title, mainEntity: { name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site, type: 'Person' } }),
   buildPerson({ name: 'astro-seo-complement maintainers', url: siteConfig.site, siteUrl: siteConfig.site, jobTitle: 'Open-source maintainers' }),
 );
 const examples = [
@@ -21,7 +21,7 @@ const examples = [
   ['/breadcrumbs/', 'Breadcrumbs', 'Navigation hierarchy as structured data'],
 ];
 ---
-<DemoLayout title={siteConfig.title} description={siteConfig.description} canonicalUrl="/" schema={schema} eyebrow="A living showcase for Astro">
+<DemoLayout title={siteConfig.title} description={siteConfig.description} canonicalUrl="/" schema={schema} eyebrow="A living showcase for Astro" uppercaseTitle>
   <section class="panel">
     <p><span class="tag">No extra dependencies</span></p>
     <p>This site is the small, inspectable companion to the package. Each route pairs semantic HTML with explicit SEO metadata and a schema graph built by <code>astro-seo-complement</code>.</p>

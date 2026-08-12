@@ -25,7 +25,10 @@ const routes = [
   <body class="demo-shell blog-layout">
     <aside class="demo-sidebar" aria-label="Site navigation">
       <div>
-        <a class="demo-brand" href="/"><span class="demo-brand-mark" aria-hidden="true">∴</span>astro-seo-complement</a>
+        <a class="demo-brand" href="/" aria-label="eloymartinezcuesta.com home">
+          <img class="demo-brand-logo" src="/logo-emc.webp" alt="EMC logo" width="1200" height="800" />
+          <span class="demo-brand-name">eloymartinezcuesta.com</span>
+        </a>
         <p class="demo-kicker">Editorial notes</p>
         <nav class="demo-nav" aria-label="Demo routes">
           <ul>
@@ -49,7 +52,7 @@ const routes = [
           <div class="blog-prose"><slot /></div>
         </article>
       </main>
-      <footer class="demo-footer"><strong>astro-seo-complement</strong> · Visible content aligned with BlogPosting JSON-LD.</footer>
+      <footer class="demo-footer"><strong>eloymartinezcuesta.com</strong> · Visible content powered by <code>astro-seo-complement</code> and aligned with BlogPosting JSON-LD.</footer>
     </div>
   </body>
 </html>

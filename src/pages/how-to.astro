@@ -1,5 +1,6 @@
 ---
 import DemoLayout from '../layouts/DemoLayout.astro';
+import { siteConfig } from '../config';
 import { buildHowTo, composeGraph } from '../schemas';
 const steps = [
   { name: 'Write the page first', text: 'Create useful semantic content with a clear title, summary, headings, and links.' },
@@ -7,7 +8,7 @@ const steps = [
   { name: 'Compose related nodes', text: 'Use a schema builder for the page type, then combine related nodes with composeGraph.' },
   { name: 'Inspect the result', text: 'View source and compare the JSON-LD graph with the visible page before publishing.' },
 ];
-const schema = composeGraph(buildHowTo({ name: 'Build an inspectable Astro SEO page', totalTime: 'PT20M', siteUrl: 'https://astro-seo-complement.pages.dev', steps }));
+const schema = composeGraph(buildHowTo({ name: 'Build an inspectable Astro SEO page', totalTime: 'PT20M', siteUrl: siteConfig.site, steps }));
 ---
 <DemoLayout title="Build an inspectable Astro SEO page" description="A four-step HowTo guide showing names, instructions, position, and total time." canonicalUrl="/how-to/" schema={schema}>
   <ol class="steps">{steps.map(({ name, text }) => <li><div><h2>{name}</h2><p>{text}</p></div></li>)}</ol>
